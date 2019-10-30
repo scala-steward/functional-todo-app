@@ -1,36 +1,32 @@
 package com.dylanm.functionalTodoApp.memory
 
+import java.sql.Connection
+
 import cats.Monad
-import cats.arrow.FunctionK
 import cats.effect.Effect
-import cats.effect.IO
-import cats.~>
 import com.dylanm.functionalTodoApp.Application
 import com.dylanm.functionalTodoApp.config.ApplicationConfig
 import com.dylanm.functionalTodoApp.config.Later
 import com.dylanm.functionalTodoApp.config.module.DaoModule
-import com.dylanm.functionalTodoApp.config.module.DaoModuleImpl
 import com.dylanm.functionalTodoApp.config.module.DbModule
-import com.dylanm.functionalTodoApp.dao.TodoDao
-import com.dylanm.functionalTodoApp.db.TxManager
-import com.dylanm.functionalTodoApp.db.sql.SqlDb
+import com.dylanm.functionalTodoApp.db.Db
+import com.dylanm.functionalTodoApp.db.DbEval
+import com.dylanm.functionalTodoApp.memory.MemoryApp._
 
-class MemoryApp[I[_]: Later: Monad, F[_]: Effect] extends Application[I, F](ApplicationConfig.testConfig) {
-  import com.dylanm.functionalTodoApp.db.sql.db
+class MemoryApp[I[_]: Later: Monad, F[_]: Effect]() extends Application[I, F, F](ApplicationConfig.testConfig) {
 
-  override lazy val daoModule: DaoModule[SqlDbF, I] = new DaoModuleImpl[SqlDbF, I] {
-    override lazy val todoDao: I[TodoDao[SqlDbF]] = Later[I].later {
-      new MemoryTodoDao[SqlDbF]
-    }
+  override lazy val daoModule: DaoModule[F, I] = new MemoryDaoModule[F, I]
+
+  override lazy val dbModule: DbModule[F, F, I] = new MemoryDbModule[F, I]
+}
+
+object MemoryApp {
+  implicit def DB[F[_]]: Db[F, F] = new Db[F, F] {
+    override def lift[A](f: Connection => F[A]): F[A] = ???
   }
 
-  override lazy val dbModule: DbModule[F, SqlDbF, I] = new DbModule[F, SqlDbF, I] {
-    override lazy val tx: I[TxManager[F, SqlDbF]] = Later[I].later {
-      new TxManager[F, SqlDbF] {
-        override def tx: SqlDbF ~> F = FunctionK.lift(impl)
-
-        private def impl[A](t: SqlDb[F, A]): F[A] = t.apply(null)
-      }
-    }
+  implicit def DE[F[_]]: DbEval[F, F] = new DbEval[F, F] {
+    override def eval[A](f: F[A], c: Connection): F[A] = ???
   }
+
 }

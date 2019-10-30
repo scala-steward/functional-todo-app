@@ -2,6 +2,11 @@ package com.dylanm.functionalTodoApp.config
 
 import cats.Eval
 
+/**
+  * Typeclass for monads supporting lazy evaluation and result memoization
+  *
+  * @tparam F
+  */
 trait Later[F[_]] {
   def later[A](f: => A): F[A]
 }

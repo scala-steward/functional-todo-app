@@ -6,6 +6,8 @@ import com.dylanm.functionalTodoApp.config.ApplicationConfig
 import com.dylanm.functionalTodoApp.config.DbConfig
 import com.dylanm.functionalTodoApp.config.JsonConfig
 import com.dylanm.functionalTodoApp.config.ServerConfig
+import com.dylanm.functionalTodoApp.db.sql.SqlDb
+
 
 
 object Main {
@@ -28,7 +30,8 @@ object Main {
       )
     )
 
-    val app = new Application[Eval, IO](config)
+    import com.dylanm.functionalTodoApp.db.sql._
+    val app = new Application[Eval, IO, SqlDb[IO, ?]](config)
 
     val server = app.serverModule.server.value
 

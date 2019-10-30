@@ -1,6 +1,7 @@
 package com.dylanm.functionalTodoApp
 
 import cats.Eval
+import cats.effect.IO
 import com.dylanm.functionalTodoApp.config.ApplicationConfig
 import com.dylanm.functionalTodoApp.config.DbConfig
 import com.dylanm.functionalTodoApp.config.JsonConfig
@@ -27,7 +28,7 @@ object Main {
       )
     )
 
-    val app = new Application[Eval](config)
+    val app = new Application[Eval, IO](config)
 
     val server = app.serverModule.server.value
 

@@ -10,8 +10,6 @@ import com.twitter.finagle.http.Status
 import com.dylanm.functionalTodoApp.controller.TodoRequest
 import com.dylanm.functionalTodoApp.http.ExceptionFilter
 import com.dylanm.functionalTodoApp.http.Route
-import com.dylanm.functionalTodoApp.model.Todo
-
 
 trait WebModule[F[_], I[_]] {
   def service: I[Request => F[Response]]

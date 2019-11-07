@@ -5,10 +5,10 @@ import java.sql.Connection
 import cats.Monad
 import cats.effect.Effect
 import com.dylanm.functionalTodoApp.Application
-import com.dylanm.functionalTodoApp.config.ApplicationConfig
-import com.dylanm.functionalTodoApp.config.Later
-import com.dylanm.functionalTodoApp.config.module.DaoModule
-import com.dylanm.functionalTodoApp.config.module.DbModule
+import com.dylanm.functionalTodoApp.module.config.ApplicationConfig
+import com.dylanm.functionalTodoApp.module.config.Later
+import com.dylanm.functionalTodoApp.module.DaoModule
+import com.dylanm.functionalTodoApp.module.DbModule
 import com.dylanm.functionalTodoApp.db.Db
 import com.dylanm.functionalTodoApp.db.DbEval
 import com.dylanm.functionalTodoApp.memory.MemoryApp._

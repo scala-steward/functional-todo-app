@@ -1,4 +1,4 @@
-package com.dylanm.functionalTodoApp.config
+package com.dylanm.functionalTodoApp.module.config
 
 case class DbConfig(
   url: String,

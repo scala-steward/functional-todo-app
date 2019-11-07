@@ -2,8 +2,8 @@ package com.dylanm.functionalTodoApp.memory
 
 import cats.arrow.FunctionK
 import cats.~>
-import com.dylanm.functionalTodoApp.config.Later
-import com.dylanm.functionalTodoApp.config.module.DbModule
+import com.dylanm.functionalTodoApp.module.config.Later
+import com.dylanm.functionalTodoApp.module.DbModule
 import com.dylanm.functionalTodoApp.db.TxManager
 
 class MemoryDbModule[F[_], I[_]: Later] extends DbModule[F, F, I] {

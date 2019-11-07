@@ -1,12 +1,12 @@
-package com.dylanm.functionalTodoApp.config.module
+package com.dylanm.functionalTodoApp.module
 
 import cats.Monad
 import cats.effect.Sync
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.json.modules.FinatraJacksonModule
-import com.dylanm.functionalTodoApp.config.JsonConfig
-import com.dylanm.functionalTodoApp.config.Later
+import com.dylanm.functionalTodoApp.module.config.JsonConfig
+import com.dylanm.functionalTodoApp.module.config.Later
 import com.dylanm.functionalTodoApp.logging.Log
 import com.dylanm.functionalTodoApp.logging.LogImpl
 

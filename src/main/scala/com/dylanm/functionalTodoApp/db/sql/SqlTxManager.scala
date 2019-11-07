@@ -20,10 +20,13 @@ import scala.util.Try
   *
   * @param ds data source to use
   * @param poolSize maximum number of parallel transactions
+  * @param alwaysRollback Always rollback transaction, useful for tests
   * @tparam F generic effect
   */
-class SqlTxManager[F[_]: Sync, DbEffect[_]](ds: DataSource, jdbcPool: ContextShift[F])(implicit DE: DbEval[DbEffect, F])
-  extends TxManager[F, DbEffect] {
+class SqlTxManager[F[_]: Sync, DbEffect[_]](ds: DataSource,
+                                            jdbcPool: ContextShift[F],
+                                            alwaysRollback: Boolean = false)
+                                           (implicit DE: DbEval[DbEffect, F]) extends TxManager[F, DbEffect] {
 
   override def tx: DbEffect ~> F = FunctionK.lift(doTx)
 
@@ -42,7 +45,7 @@ class SqlTxManager[F[_]: Sync, DbEffect[_]](ds: DataSource, jdbcPool: ContextShi
           Sync[F].delay(conn.rollback()).flatMap(_ => Sync[F].raiseError(e))
 
         case Right(r) =>
-          Sync[F].delay(conn.commit()).map(_ => r)
+          Sync[F].delay(if (alwaysRollback) conn.rollback() else conn.commit()).map(_ => r)
       }
     }
 

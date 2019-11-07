@@ -15,7 +15,7 @@ class TodoDaoSql[DbEffect[_]: Monad, F[_]: Sync](implicit DB: Db[DbEffect, F]) e
   override def list(): DbEffect[Seq[Todo]] = DB.lift { conn =>
     val r = for {
       st <- Resource.fromAutoCloseable(Sync[F].delay(conn.createStatement()))
-      rs <- Resource.fromAutoCloseable(Sync[F].delay(st.executeQuery("select uid, text from item")))
+      rs <- Resource.fromAutoCloseable(Sync[F].delay(st.executeQuery("select uid, text from item order by uid")))
     } yield {
       rsIterator(rs)(parse).toList
     }

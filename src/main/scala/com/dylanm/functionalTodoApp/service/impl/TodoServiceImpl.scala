@@ -5,7 +5,6 @@ import cats.implicits._
 import com.dylanm.functionalTodoApp.dao.TodoDao
 import com.dylanm.functionalTodoApp.exception.ResourceAlreadyExistsException
 import com.dylanm.functionalTodoApp.exception.ResourceNotFoundException
-import com.dylanm.functionalTodoApp.exception.RestException
 import com.dylanm.functionalTodoApp.model.Todo
 import com.dylanm.functionalTodoApp.service.TodoService
 
@@ -14,6 +13,8 @@ class TodoServiceImpl[F[_]: Sync](
                                  ) extends TodoService[F] {
 
   override def list(): F[Seq[Todo]] = dao.list()
+
+  override def get(id: String): F[Option[Todo]] = dao.get(id)
 
   override def create(todo: Todo): F[Todo] = for {
     _ <- dao.get(todo.id).ensure(ResourceAlreadyExistsException("Todo with this id already exists"))(_.isEmpty)

@@ -1,4 +1,4 @@
-package com.dylanm.functionalTodoApp.config.module
+package com.dylanm.functionalTodoApp.module
 
 import cats.Monad
 import cats.effect.Sync
@@ -7,7 +7,7 @@ import com.twitter.finagle.http.Method
 import com.twitter.finagle.http.Request
 import com.twitter.finagle.http.Response
 import com.twitter.finagle.http.Status
-import com.dylanm.functionalTodoApp.config.Later
+import com.dylanm.functionalTodoApp.controller.TodoRequest
 import com.dylanm.functionalTodoApp.http.ExceptionFilter
 import com.dylanm.functionalTodoApp.http.Route
 import com.dylanm.functionalTodoApp.model.Todo
@@ -18,9 +18,9 @@ trait WebModule[F[_], I[_]] {
 }
 
 class WebModuleImpl[F[_]: Sync, I[_]: Monad: Later](
-                                                     controllerModule: ControllerModule[F, I],
-                                                     commonModule: CommonModule[F, I]
-                                                   ) extends WebModule[F, I] {
+ controllerModule: ControllerModule[F, I],
+ commonModule: CommonModule[F, I]
+) extends WebModule[F, I] {
 
   private lazy val route: I[Route[F, Response]] = for {
     todoController <- controllerModule.todoController
@@ -42,12 +42,15 @@ class WebModuleImpl[F[_]: Sync, I[_]: Monad: Later](
     List(
       Route.mk[F, Response](Method.Get, "/items")((req, ctx) => toJson(todoController.list())),
 
+      Route.mk[F, Response](Method.Get, "/items/:id")((req, ctx) =>
+        toJson(todoController.get(ctx(":id")))),
+
       Route.mk[F, Response](Method.Post, "/items/:id")((req, ctx) =>
-        toJson(todoController.create(fromJson[Todo](req).copy(id = ctx(":id"))))
+        toJson(todoController.create(ctx(":id"), fromJson[TodoRequest](req)))
       ),
 
       Route.mk[F, Response](Method.Put, "/items/:id")((req, ctx) =>
-        toJson(todoController.update(fromJson[Todo](req).copy(id = ctx(":id"))))
+        toJson(todoController.update(ctx(":id"), fromJson[TodoRequest](req)))
       ),
 
       Route.mk[F, Response](Method.Delete, "/items/:id")((req, ctx) =>

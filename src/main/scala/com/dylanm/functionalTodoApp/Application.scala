@@ -3,24 +3,24 @@ package com.dylanm.functionalTodoApp
 import cats.Monad
 import cats.effect.Effect
 import cats.effect.Sync
-import com.dylanm.functionalTodoApp.config.ApplicationConfig
-import com.dylanm.functionalTodoApp.config.Later
-import com.dylanm.functionalTodoApp.config.module.CommonModule
-import com.dylanm.functionalTodoApp.config.module.CommonModuleImpl
-import com.dylanm.functionalTodoApp.config.module.ControllerModule
-import com.dylanm.functionalTodoApp.config.module.ControllerModuleImpl
-import com.dylanm.functionalTodoApp.config.module.DaoModule
-import com.dylanm.functionalTodoApp.config.module.DaoModuleImpl
-import com.dylanm.functionalTodoApp.config.module.DbModule
-import com.dylanm.functionalTodoApp.config.module.DbModuleImpl
-import com.dylanm.functionalTodoApp.config.module.ServerModule
-import com.dylanm.functionalTodoApp.config.module.ServerModuleImpl
-import com.dylanm.functionalTodoApp.config.module.ServiceModule
-import com.dylanm.functionalTodoApp.config.module.ServiceModuleImpl
-import com.dylanm.functionalTodoApp.config.module.WebModule
-import com.dylanm.functionalTodoApp.config.module.WebModuleImpl
 import com.dylanm.functionalTodoApp.db.Db
 import com.dylanm.functionalTodoApp.db.DbEval
+import com.dylanm.functionalTodoApp.module.CommonModule
+import com.dylanm.functionalTodoApp.module.CommonModuleImpl
+import com.dylanm.functionalTodoApp.module.ControllerModule
+import com.dylanm.functionalTodoApp.module.ControllerModuleImpl
+import com.dylanm.functionalTodoApp.module.DaoModule
+import com.dylanm.functionalTodoApp.module.DaoModuleImpl
+import com.dylanm.functionalTodoApp.module.DbModule
+import com.dylanm.functionalTodoApp.module.DbModuleImpl
+import com.dylanm.functionalTodoApp.module.Later
+import com.dylanm.functionalTodoApp.module.ServerModule
+import com.dylanm.functionalTodoApp.module.ServerModuleImpl
+import com.dylanm.functionalTodoApp.module.ServiceModule
+import com.dylanm.functionalTodoApp.module.ServiceModuleImpl
+import com.dylanm.functionalTodoApp.module.WebModule
+import com.dylanm.functionalTodoApp.module.WebModuleImpl
+import com.dylanm.functionalTodoApp.module.config.ApplicationConfig
 
 class Application[I[_]: Later: Monad, F[_]: Effect, DbEffect[_]: Sync](config: ApplicationConfig)(
   implicit DB: Db[DbEffect, F], DE: DbEval[DbEffect, F]
@@ -34,9 +34,11 @@ class Application[I[_]: Later: Monad, F[_]: Effect, DbEffect[_]: Sync](config: A
 
   lazy val serviceModule: ServiceModule[DbEffect, I] = new ServiceModuleImpl[DbEffect, I](daoModule)
 
-  lazy val controllerModule: ControllerModule[F, I] = new ControllerModuleImpl[F, DbEffect, I](serviceModule, dbModule)
+  lazy val controllerModule: ControllerModule[F, I] = new ControllerModuleImpl[F, DbEffect, I](
+    commonModule, serviceModule, dbModule)
 
   lazy val webModule: WebModule[F, I] = new WebModuleImpl[F, I](controllerModule, commonModule)
 
-  lazy val serverModule: ServerModule[F, I] = new ServerModuleImpl[F, I](webModule, config.server)
+  lazy val serverModule: ServerModule[F, I] = new ServerModuleImpl[F, I](
+    webModule, commonModule, config.server)
 }

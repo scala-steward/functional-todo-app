@@ -1,8 +1,7 @@
-package com.dylanm.functionalTodoApp.config.module
+package com.dylanm.functionalTodoApp.module
 
 import cats.Monad
 import cats.effect.Sync
-import com.dylanm.functionalTodoApp.config.Later
 import com.dylanm.functionalTodoApp.dao.TodoDao
 import com.dylanm.functionalTodoApp.dao.sql.TodoDaoSql
 import com.dylanm.functionalTodoApp.db.Db

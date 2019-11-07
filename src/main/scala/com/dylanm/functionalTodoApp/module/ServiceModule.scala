@@ -1,4 +1,4 @@
-package com.dylanm.functionalTodoApp.config.module
+package com.dylanm.functionalTodoApp.module
 
 import cats.Monad
 import cats.effect.Sync

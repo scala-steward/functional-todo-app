@@ -1,4 +1,4 @@
-package com.dylanm.functionalTodoApp.module.config
+package com.dylanm.functionalTodoApp.module
 
 import cats.Eval
 

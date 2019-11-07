@@ -6,14 +6,15 @@ import cats.Monad
 import cats.effect.Effect
 import com.dylanm.functionalTodoApp.Application
 import com.dylanm.functionalTodoApp.module.config.ApplicationConfig
-import com.dylanm.functionalTodoApp.module.config.Later
+import com.dylanm.functionalTodoApp.module.Later
 import com.dylanm.functionalTodoApp.module.DaoModule
 import com.dylanm.functionalTodoApp.module.DbModule
 import com.dylanm.functionalTodoApp.db.Db
 import com.dylanm.functionalTodoApp.db.DbEval
 import com.dylanm.functionalTodoApp.memory.MemoryApp._
 
-class MemoryApp[I[_]: Later: Monad, F[_]: Effect]() extends Application[I, F, F](ApplicationConfig.testConfig) {
+class MemoryApp[I[_]: Later: Monad, F[_]: Effect]()
+  extends Application[I, F, F](ApplicationConfig.testConfig) {
 
   override lazy val daoModule: DaoModule[F, I] = new MemoryDaoModule[F, I]
 

@@ -12,9 +12,9 @@ import com.dylanm.functionalTodoApp.logging.Log
 
 
 class TodoControllerImpl[F[_]: Sync, DbEffect[_]](
-  service: TodoService[DbEffect],
-  tx: TxManager[F, DbEffect],
-  log: Log[F]
+ service: TodoService[DbEffect],
+ tx: TxManager[F, DbEffect],
+ log: Log[F]
 ) extends TodoController[F] {
 
   override def list(): F[Seq[Todo]] = log.logAudit("list") {

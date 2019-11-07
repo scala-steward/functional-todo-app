@@ -2,7 +2,7 @@ package com.dylanm.functionalTodoApp.memory
 
 import cats.arrow.FunctionK
 import cats.~>
-import com.dylanm.functionalTodoApp.module.config.Later
+import com.dylanm.functionalTodoApp.module.Later
 import com.dylanm.functionalTodoApp.module.DbModule
 import com.dylanm.functionalTodoApp.db.TxManager
 

@@ -5,7 +5,7 @@ import com.dylanm.functionalTodoApp.module.Later
 import com.dylanm.functionalTodoApp.module.DaoModule
 import com.dylanm.functionalTodoApp.dao.TodoDao
 
-class MemoryDaoModule[F[_]: Monad, I[_]: Later] extends DaoModule[F, I] {
+class MemoryDaoModule[I[_]: Later, F[_]: Monad] extends DaoModule[I, F] {
   override lazy val todoDao: I[TodoDao[F]] = Later[I].later {
     new MemoryTodoDao[F]
   }

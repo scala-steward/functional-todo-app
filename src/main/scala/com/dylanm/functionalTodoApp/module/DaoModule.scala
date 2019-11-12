@@ -6,14 +6,15 @@ import com.dylanm.functionalTodoApp.dao.TodoDao
 import com.dylanm.functionalTodoApp.dao.sql.TodoDaoSql
 import com.dylanm.functionalTodoApp.db.sql.SqlEffectLift
 
-trait DaoModule[DbEffect[_], I[_]] {
+trait DaoModule[I[_], DbEffect[_]] {
   def todoDao: I[TodoDao[DbEffect]]
 }
 
-class DaoModuleImpl[DbEffect[_]: Monad, F[_]: Sync, I[_]: Later: Monad](implicit DB: SqlEffectLift[DbEffect, F])
-  extends DaoModule[DbEffect, I] {
+class DaoModuleImpl[I[_]: Later: Monad, F[_]: Sync, DbEffect[_]: Monad](
+  implicit DB: SqlEffectLift[F, DbEffect]
+) extends DaoModule[I, DbEffect] {
 
   override lazy val todoDao: I[TodoDao[DbEffect]] = Later[I].later {
-    new TodoDaoSql[DbEffect, F]
+    new TodoDaoSql[F, DbEffect]
   }
 }

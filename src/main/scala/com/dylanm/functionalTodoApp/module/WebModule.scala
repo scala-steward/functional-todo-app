@@ -11,14 +11,14 @@ import com.dylanm.functionalTodoApp.controller.TodoRequest
 import com.dylanm.functionalTodoApp.http.ExceptionFilter
 import com.dylanm.functionalTodoApp.http.Route
 
-trait WebModule[F[_], I[_]] {
+trait WebModule[I[_], F[_]] {
   def service: I[Request => F[Response]]
 }
 
-class WebModuleImpl[F[_]: Sync, I[_]: Monad: Later](
- controllerModule: ControllerModule[F, I],
- commonModule: CommonModule[F, I]
-) extends WebModule[F, I] {
+class WebModuleImpl[I[_]: Monad: Later, F[_]: Sync](
+ controllerModule: ControllerModule[I, F],
+ commonModule: CommonModule[I, F]
+) extends WebModule[I, F] {
 
   private lazy val route: I[Route[F, Response]] = for {
     todoController <- controllerModule.todoController

@@ -11,18 +11,17 @@ import com.dylanm.functionalTodoApp.module.config.ApplicationConfig
 import com.dylanm.functionalTodoApp.module.config.DbConfig
 
 class IntegrationApp[I[_] : Later : Monad, F[_] : Effect, DbEffect[_] : Sync](config: ApplicationConfig)
-                                                                             (implicit DB: SqlEffectLift[DbEffect, F],
-                                                                              DE: SqlEffectEval[DbEffect, F])
-  extends Application[I, F, DbEffect](config) {
+                                                                             (implicit DB: SqlEffectLift[F, DbEffect], DE: SqlEffectEval[F, DbEffect]
+                                                                             ) extends Application[I, F, DbEffect](config) {
 
-  override lazy val dbModule = new DbModuleImpl[F, DbEffect, I](config.db, alwaysRollback = true)
+  override lazy val dbModule = new DbModuleImpl[I, F, DbEffect](config.db, alwaysRollback = true)
 }
 
 object IntegrationApp {
 
   def make[I[_] : Later : Monad, F[_] : Effect, DbEffect[_] : Sync](db: DbConfig)
-                                                                   (implicit DB: SqlEffectLift[DbEffect, F], DE: SqlEffectEval[DbEffect, F]):
-  IntegrationApp[I, F, DbEffect] = {
+                                                                   (implicit DB: SqlEffectLift[F, DbEffect],
+                                                                    DE: SqlEffectEval[F, DbEffect]): IntegrationApp[I, F, DbEffect] = {
 
     val cfg = ApplicationConfig.testConfig.copy(db = db)
 

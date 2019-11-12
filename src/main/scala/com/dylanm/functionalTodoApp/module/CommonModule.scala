@@ -9,15 +9,15 @@ import com.dylanm.functionalTodoApp.module.config.JsonConfig
 import com.dylanm.functionalTodoApp.logging.Log
 import com.dylanm.functionalTodoApp.logging.LogImpl
 
-trait CommonModule[F[_], I[_]] {
+trait CommonModule[I[_], F[_]] {
   def json: I[FinatraObjectMapper]
 
   def log: I[Log[F]]
 }
 
-class CommonModuleImpl[F[_]: Sync, I[_]: Later: Monad](
-                                                        jsonConfig: JsonConfig
-                                                      ) extends CommonModule[F, I] {
+class CommonModuleImpl[I[_]: Later: Monad, F[_]: Sync](
+  jsonConfig: JsonConfig
+) extends CommonModule[I, F] {
 
   override lazy val json: I[FinatraObjectMapper] = Later[I].later {
     val om = FinatraJacksonModule.provideScalaObjectMapper(null)

@@ -6,7 +6,7 @@ import com.dylanm.functionalTodoApp.module.Later
 import com.dylanm.functionalTodoApp.module.DbModule
 import com.dylanm.functionalTodoApp.db.TxManager
 
-class MemoryDbModule[F[_], I[_]: Later] extends DbModule[F, F, I] {
+class MemoryDbModule[I[_]: Later, F[_]] extends DbModule[I, F, F] {
 
   override lazy val tx: I[TxManager[F, F]] = Later[I].later {
     new TxManager[F, F] {

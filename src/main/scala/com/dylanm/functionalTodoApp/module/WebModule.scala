@@ -44,11 +44,11 @@ class WebModuleImpl[F[_]: Sync, I[_]: Monad: Later](
         toJson(todoController.get(ctx(":id")))),
 
       Route.mk[F, Response](Method.Post, "/items/:id")((req, ctx) =>
-        toJson(todoController.create(ctx(":id"), fromJson[TodoRequest](req)))
+        toJson(todoController.create(ctx(":id"), fromJson[TodoRequest](req).validate(ctx(":id"))))
       ),
 
       Route.mk[F, Response](Method.Put, "/items/:id")((req, ctx) =>
-        toJson(todoController.update(ctx(":id"), fromJson[TodoRequest](req)))
+        toJson(todoController.update(ctx(":id"), fromJson[TodoRequest](req).validate(ctx(":id"))))
       ),
 
       Route.mk[F, Response](Method.Delete, "/items/:id")((req, ctx) =>

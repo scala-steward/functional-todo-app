@@ -19,6 +19,7 @@ This project uses SBT to handle compiling, building, and running
 - layered architecture (dao - service - controller - route)
 - pure data access layer based on JDBC
 - pure JDBC transaction management
+- input validation
 - quality error handling (error classification, REST error messages)
 - pure logging
 - structured audit logging

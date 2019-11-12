@@ -9,7 +9,7 @@ import org.scalatest.FreeSpec
 
 class TodoAcceptanceTest extends FreeSpec {
   import com.dylanm.functionalTodoApp.db.sql._
-  val app = IntegrationApp.make[Eval, IO, SqlDb[IO, ?]](EmbeddedPostgres.acceptanceInstance)
+  val app = IntegrationApp.make[Eval, IO, SqlEffect[IO, ?]](EmbeddedPostgres.acceptanceInstance)
   val service = app.webModule.service.value
   val om = app.commonModule.json.value
 

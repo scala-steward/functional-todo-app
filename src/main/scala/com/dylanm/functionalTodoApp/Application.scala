@@ -3,8 +3,9 @@ package com.dylanm.functionalTodoApp
 import cats.Monad
 import cats.effect.Effect
 import cats.effect.Sync
-import com.dylanm.functionalTodoApp.db.Db
-import com.dylanm.functionalTodoApp.db.DbEval
+import com.dylanm.functionalTodoApp.db.SqlEffectLift
+import com.dylanm.functionalTodoApp.db.sql.SqlEffectEval
+import com.dylanm.functionalTodoApp.db.sql.SqlEffectLift
 import com.dylanm.functionalTodoApp.module.CommonModule
 import com.dylanm.functionalTodoApp.module.CommonModuleImpl
 import com.dylanm.functionalTodoApp.module.ControllerModule
@@ -23,7 +24,7 @@ import com.dylanm.functionalTodoApp.module.WebModuleImpl
 import com.dylanm.functionalTodoApp.module.config.ApplicationConfig
 
 class Application[I[_]: Later: Monad, F[_]: Effect, DbEffect[_]: Sync](config: ApplicationConfig)(
-  implicit DB: Db[DbEffect, F], DE: DbEval[DbEffect, F]
+  implicit DB: SqlEffectLift[DbEffect, F], DE: SqlEffectEval[DbEffect, F]
 ) {
 
   lazy val commonModule: CommonModule[F, I] = new CommonModuleImpl[F, I](config.json)

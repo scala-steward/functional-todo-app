@@ -1,7 +1,7 @@
 package com.dylanm.functionalTodoApp.dao
 
 import cats.effect.IO
-import com.dylanm.functionalTodoApp.db.sql.SqlDb
+import com.dylanm.functionalTodoApp.db.sql.SqlEffect
 import com.dylanm.functionalTodoApp.int.IntegrationTest
 import com.dylanm.functionalTodoApp.model.Todo
 
@@ -56,7 +56,7 @@ class TodoDaoTest extends IntegrationTest {
     } yield ()
   }
 
-  private def db[A](value: SqlDb[IO, A]): Unit = {
+  private def db[A](value: SqlEffect[IO, A]): Unit = {
     app.dbModule.tx.value.tx(value).unsafeRunSync()
   }
 }

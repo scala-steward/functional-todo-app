@@ -9,8 +9,7 @@ import com.dylanm.functionalTodoApp.module.config.ApplicationConfig
 import com.dylanm.functionalTodoApp.module.Later
 import com.dylanm.functionalTodoApp.module.DaoModule
 import com.dylanm.functionalTodoApp.module.DbModule
-import com.dylanm.functionalTodoApp.db.Db
-import com.dylanm.functionalTodoApp.db.DbEval
+import com.dylanm.functionalTodoApp.db.sql.{SqlEffectLift, SqlEffectEval}
 import com.dylanm.functionalTodoApp.memory.MemoryApp._
 
 class MemoryApp[I[_]: Later: Monad, F[_]: Effect]()
@@ -22,11 +21,11 @@ class MemoryApp[I[_]: Later: Monad, F[_]: Effect]()
 }
 
 object MemoryApp {
-  implicit def DB[F[_]]: Db[F, F] = new Db[F, F] {
+  implicit def DB[F[_]]: SqlEffectLift[F, F] = new SqlEffectLift[F, F] {
     override def lift[A](f: Connection => F[A]): F[A] = ???
   }
 
-  implicit def DE[F[_]]: DbEval[F, F] = new DbEval[F, F] {
+  implicit def DE[F[_]]: SqlEffectEval[F, F] = new SqlEffectEval[F, F] {
     override def eval[A](f: F[A], c: Connection): F[A] = ???
   }
 

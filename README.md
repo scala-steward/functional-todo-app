@@ -25,3 +25,4 @@ This project uses SBT to handle compiling, building, and running
 - structured audit logging
 - data access layer integration tests using embedded postgres
 - acceptance tests using embedded postgres
+- packaging and dockerization. Try it now: `docker run --rm dylanm/functionaltodoapp --help`

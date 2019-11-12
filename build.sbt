@@ -38,6 +38,8 @@ lazy val testDependencies = Seq(
 
 val functionalTodoApp = project.in(file("."))
   .settings(scalaSettings)
+  .enablePlugins(PackPlugin)
+  .settings(packMain := Map("functionaltodoapp" -> "com.dylanm.functionalTodoApp.Main"))
   .settings(resolvers += "Scf37" at "https://dl.bintray.com/scf37/maven/")
   .settings(libraryDependencies ++= dependencies)
   .settings(libraryDependencies ++= testDependencies)

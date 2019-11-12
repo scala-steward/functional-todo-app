@@ -2,6 +2,9 @@ package com.dylanm.functionalTodoApp.exception
 
 import scala.util.control.NoStackTrace
 
+/**
+  * Handled by ExceptionFilter in predictable way, resulting in appropriate json error message
+  */
 sealed trait RestException extends RuntimeException with NoStackTrace {
   def errors: Seq[String]
   def status: Int

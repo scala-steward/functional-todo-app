@@ -10,6 +10,13 @@ import com.dylanm.functionalTodoApp.dao.TodoDao
 import com.dylanm.functionalTodoApp.db.sql.SqlEffectLift
 import com.dylanm.functionalTodoApp.model.Todo
 
+/**
+  * TodoDao implementation using jdbc Connection
+  *
+  * @param DB typeclass to lift Connection => T function to DbEffect
+  * @tparam F generic effect
+  * @tparam DbEffect database effect
+  */
 class TodoDaoSql[F[_]: Sync, DbEffect[_]: Monad](
   implicit DB: SqlEffectLift[F, DbEffect])
   extends TodoDao[DbEffect] {

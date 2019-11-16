@@ -50,13 +50,11 @@ Application uses three types of effects:
 - Generic effect F[_]. 
   - This is generic F used for asynchonous code with lazy evaluation, e.g. cats IO or monix Task
 - Abstract database effect DbEffect[_]/concrete database effect SqlEffect[F[_], ?]
-  - It wraps function `java.sql.Connection => T`. Usual synchronous database code takes this form. Instance of `java.sql.Connection` is needed to evaluate this effect. 
+  - Wraps function `java.sql.Connection => T`. Usual synchronous database code takes this form. Instance of `java.sql.Connection` is needed to evaluate this effect. 
 - application initialization effect I[_]
-  - it wraps component initialization code. It is lazy so components will only be created on demand and caches its result to produce singletons
+  - Wraps component initialization code. It is lazy so components will only be created on demand and caches its result to produce singletons
 
 ### Modules
 
-Modules system used can be seen as extension of well-known cake pattern keeping its strengths 
-    of ability to override any instance or to get any instance from assembled application.
-
-In addition, it supports composition, precise explicit dependency management and lazy evaluation.  
+Modules system used can be seen as extension of well-known cake pattern in that they allow for the ability to override any instance or to get any instance from assembled application.
+In addition, though, modules support composition, precise explicit dependency management and lazy evaluation.  

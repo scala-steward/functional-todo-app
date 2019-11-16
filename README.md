@@ -67,3 +67,8 @@ In addition, though, modules support composition, precise explicit dependency ma
 - find better way to manage Application effects (3 seems to be a bit high)
 - add scalacheck?
 - use `Resource` for `I[_]`? Not sure I should care about proper shutdown - well-written application should behave well in case of forced termination.
+- application statistics: query and transaction execution timings. Finagle also provides request timing stats, make it more explicit somehow?
+- add scalafmt?
+- consider moving to http4s for JSON?
+- Add request flow control: timeouts, parallel request count limit
+- cancellation on timeout? Does it make sense on JDBC? Will it improve behavior of overloaded app?

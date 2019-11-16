@@ -10,18 +10,23 @@ import com.dylanm.functionalTodoApp.module.Later
 import com.dylanm.functionalTodoApp.module.config.ApplicationConfig
 import com.dylanm.functionalTodoApp.module.config.DbConfig
 
-class IntegrationApp[I[_] : Later : Monad, F[_] : Effect, DbEffect[_] : Sync](config: ApplicationConfig)
-                                                                             (implicit DB: SqlEffectLift[F, DbEffect], DE: SqlEffectEval[F, DbEffect]
-                                                                             ) extends Application[I, F, DbEffect](config) {
+class IntegrationApp[I[_] : Later : Monad, F[_] : Effect, DbEffect[_] : Sync](
+    config: ApplicationConfig,
+    alwaysRollback: Boolean
+  )
+  (implicit DB: SqlEffectLift[F, DbEffect], DE: SqlEffectEval[F, DbEffect]
+) extends Application[I, F, DbEffect](config) {
 
-  override lazy val dbModule = new DbModuleImpl[I, F, DbEffect](config.db, alwaysRollback = true)
+  override lazy val dbModule = new DbModuleImpl[I, F, DbEffect](config.db, alwaysRollback = alwaysRollback)
 }
 
 object IntegrationApp {
 
-  def make[I[_] : Later : Monad, F[_] : Effect, DbEffect[_] : Sync](db: DbConfig)
-                                                                   (implicit DB: SqlEffectLift[F, DbEffect],
-                                                                    DE: SqlEffectEval[F, DbEffect]): IntegrationApp[I, F, DbEffect] = {
+  def make[I[_] : Later : Monad, F[_] : Effect, DbEffect[_] : Sync](
+    db: DbConfig,
+    alwaysRollback: Boolean
+  )(implicit DB: SqlEffectLift[F, DbEffect],
+    DE: SqlEffectEval[F, DbEffect]): IntegrationApp[I, F, DbEffect] = {
 
     val cfg = ApplicationConfig.testConfig.copy(db = db)
 

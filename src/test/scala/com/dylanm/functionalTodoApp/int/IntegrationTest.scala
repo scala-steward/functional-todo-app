@@ -11,5 +11,8 @@ abstract class IntegrationTest extends FreeSpec {
 
 object IntegrationTest {
   import com.dylanm.functionalTodoApp.db.sql._
-  lazy val app = IntegrationApp.make[Eval, IO, SqlEffect[IO, ?]](EmbeddedPostgres.instance)
+  lazy val app = IntegrationApp.make[Eval, IO, SqlEffect[IO, ?]](
+    db = EmbeddedPostgres.instance,
+    alwaysRollback = true
+  )
 }

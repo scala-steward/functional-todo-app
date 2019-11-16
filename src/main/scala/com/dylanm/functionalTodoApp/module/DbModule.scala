@@ -24,7 +24,8 @@ trait DbModule[I[_], F[_], DbEffect[_]] {
   def tx: I[TxManager[F, DbEffect]]
 }
 
-class DbModuleImpl[I[_]: Later: Monad, F[_]: Async, DbEffect[_]](config: DbConfig, alwaysRollback: Boolean = false)(implicit DE: SqlEffectEval[F, DbEffect])
+class DbModuleImpl[I[_]: Later: Monad, F[_]: Async, DbEffect[_]](
+    config: DbConfig, alwaysRollback: Boolean = false)(implicit DE: SqlEffectEval[F, DbEffect])
   extends DbModule[I, F, DbEffect] {
 
   override lazy val tx: I[TxManager[F, DbEffect]] = for {
@@ -32,7 +33,7 @@ class DbModuleImpl[I[_]: Later: Monad, F[_]: Async, DbEffect[_]](config: DbConfi
     pool <- jdbcPool
     dataSource <- dataSource
   } yield  {
-    new SqlTxManager[F, DbEffect](dataSource, pool)
+    new SqlTxManager[F, DbEffect](dataSource, pool, alwaysRollback)
   }
 
   private lazy val jdbcPool: I[ContextShift[F]] = Later[I].later {

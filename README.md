@@ -47,14 +47,23 @@ Every effect can be created from computation definition, usually function (lifte
 and at some time later can be run, extracting computation result (evaluated)
 
 Application uses three types of effects:
-- Generic effect F[_]. 
+- Generic effect `F[_]`. 
   - This is generic F used for asynchonous code with lazy evaluation, e.g. cats IO or monix Task
-- Abstract database effect DbEffect[_]/concrete database effect SqlEffect[F[_], ?]
+- Abstract database effect `DbEffect[_]`/concrete database effect `SqlEffect[F[_], ?]`
   - Wraps function `java.sql.Connection => T`. Usual synchronous database code takes this form. Instance of `java.sql.Connection` is needed to evaluate this effect. 
-- application initialization effect I[_]
+- application initialization effect `I[_]`
   - Wraps component initialization code. It is lazy so components will only be created on demand and caches its result to produce singletons
 
 ### Modules
 
 Modules system used can be seen as extension of well-known cake pattern in that they allow for the ability to override any instance or to get any instance from assembled application.
 In addition, though, modules support composition, precise explicit dependency management and lazy evaluation.  
+
+## TODOs (lol I know; I should just add them to my POSTGRE DB and make them accessible via this API)
+
+- Immutable in-memory dao using `StateT`
+- request context (including requestId for logging) using `Kleisli[F, Context, ?]` instead of F
+- delayed logging - delay logging evaluation till end of request processing to decide log level based on response (e.g. enable debug logging for failed requests only)
+- find better way to manage Application effects (3 seems to be a bit high)
+- add scalacheck?
+- use `Resource` for `I[_]`? Not sure I should care about proper shutdown - well-written application should behave well in case of forced termination.

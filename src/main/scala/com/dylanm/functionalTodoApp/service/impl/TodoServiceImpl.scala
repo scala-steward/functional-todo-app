@@ -1,6 +1,6 @@
 package com.dylanm.functionalTodoApp.service.impl
 
-import cats.effect.Sync
+import cats.MonadError
 import cats.implicits._
 import com.dylanm.functionalTodoApp.dao.TodoDao
 import com.dylanm.functionalTodoApp.exception.ResourceAlreadyExistsException
@@ -8,9 +8,7 @@ import com.dylanm.functionalTodoApp.exception.ResourceNotFoundException
 import com.dylanm.functionalTodoApp.model.Todo
 import com.dylanm.functionalTodoApp.service.TodoService
 
-class TodoServiceImpl[F[_]: Sync](
-                                   dao: TodoDao[F]
-                                 ) extends TodoService[F] {
+class TodoServiceImpl[F[_]](dao: TodoDao[F])(implicit ME: MonadError[F, Throwable]) extends TodoService[F] {
 
   override def list(): F[Seq[Todo]] = dao.list()
 

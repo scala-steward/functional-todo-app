@@ -2,7 +2,6 @@ package com.dylanm.functionalTodoApp
 
 import cats.Applicative
 import cats.Defer
-import cats.Eval
 import cats.data.EitherT
 import cats.effect.ExitCode
 import cats.effect.IO
@@ -14,6 +13,7 @@ import com.typesafe.config.ConfigFactory
 import me.scf37.config3.Config3
 import me.scf37.config3.Config3.PrintedConfig
 import com.dylanm.functionalTodoApp.db.sql.SqlEffect
+import com.dylanm.functionalTodoApp.module.Lazy
 import com.dylanm.functionalTodoApp.module.config.ApplicationConfig
 
 object Main extends IOApp {
@@ -35,11 +35,10 @@ object Main extends IOApp {
 
       appConfig = ApplicationConfig.load(config)
 
-      app = new Application[Eval, IO, SqlEffect[IO, ?]](appConfig)
-      server = app.serverModule.server.value
-
+      app = new Application[Lazy, IO, SqlEffect[IO, ?]](appConfig)
+      server <- EitherT.right(IO.fromEither(app.serverModule.server.value))
       _ <- EitherT.right(IO(server()))
-    } yield (())
+    } yield ()
 
     startedApp.value.flatMap {
 

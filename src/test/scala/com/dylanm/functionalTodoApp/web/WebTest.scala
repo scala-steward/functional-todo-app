@@ -1,15 +1,15 @@
 package com.dylanm.functionalTodoApp.web
 
-import cats.Eval
 import cats.effect.IO
 import com.twitter.finagle.http.RequestBuilder
 import com.twitter.io.Buf
 import com.dylanm.functionalTodoApp.memory.MemoryApp
+import com.dylanm.functionalTodoApp.module.Lazy
 import org.scalatest.FreeSpec
 
 class WebTest extends FreeSpec {
-  val app = new MemoryApp[Eval, IO]
-  val service = app.webModule.service.value
+  val app = new MemoryApp[Lazy, IO]
+  val service = app.webModule.service.value.right.get
 
   "404 is empty response" in {
     val r = service(url("/404").buildGet()).unsafeRunSync()

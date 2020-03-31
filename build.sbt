@@ -21,7 +21,7 @@ lazy val compilerOptions = Seq(
 )
 
 lazy val dependencies = Seq(
-  "org.typelevel" %% "cats-core" % "1.6.0",
+  "org.typelevel" %% "cats-core" % "1.6.1",
   "org.typelevel" %% "cats-effect" % "1.2.0",
   "org.typelevel" %% "cats-mtl-core" % "0.4.0",
   "com.twitter" %% "finatra-jackson" % "19.2.0",

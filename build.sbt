@@ -32,6 +32,21 @@ lazy val dependencies = Seq(
   "me.scf37.config3" %% "config3" % "1.0.0"
 )
 
+// Create a test Scala style task to run with tests
+lazy val testScalastyle = taskKey[Unit]("testScalastyle")
+testScalastyle := scalastyle.in(Test).toTask("").value
+(test in Test) := ((test in Test) dependsOn testScalastyle).value
+(scalastyleConfig in Test) := baseDirectory.value/"scalastyle-test-config.xml"
+
+lazy val compileScalastyle = taskKey[Unit]("compileScalastyle")
+compileScalastyle := scalastyle.in(Compile).toTask("").value
+(test in Test) := ((test in Test) dependsOn compileScalastyle).value
+
+scalastyleFailOnError := true
+scalastyleFailOnWarning := true
+(scalastyleFailOnError in Test) := true
+(scalastyleFailOnWarning in Test) := true
+
 lazy val testDependencies = Seq(
   "org.scalatest" %% "scalatest" % "3.0.5",
   "ru.yandex.qatools.embed" % "postgresql-embedded" % "2.4"

@@ -17,8 +17,7 @@ import com.dylanm.functionalTodoApp.model.Todo
   * @tparam F generic effect
   * @tparam DbEffect database effect
   */
-class TodoDaoSql[F[_]: Sync, DbEffect[_]: Monad](
-  implicit DB: SqlEffectLift[F, DbEffect])
+class TodoDaoSql[F[_]: Sync, DbEffect[_]: Monad](implicit DB: SqlEffectLift[F, DbEffect])
   extends TodoDao[DbEffect] {
 
   override def list(): DbEffect[Seq[Todo]] = DB.lift { conn =>

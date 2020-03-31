@@ -18,14 +18,15 @@ import scala.util.Try
   * JDBC transactions are run on separate thread pool to avoid suspensions of IO threads
   *
   * @param ds data source to use
-  * @param poolSize maximum number of parallel transactions
+  * @param jdbcPool thread pool for synchronous JDBC code
   * @param alwaysRollback Always rollback transaction, useful for tests
   * @tparam F generic effect
   */
-class SqlTxManager[F[_]: Sync, DbEffect[_]](ds: DataSource,
-                                            jdbcPool: ContextShift[F],
-                                            alwaysRollback: Boolean = false)
-                                           (implicit DE: SqlEffectEval[F, DbEffect]) extends TxManager[F, DbEffect] {
+class SqlTxManager[F[_]: Sync, DbEffect[_]](
+  ds: DataSource,
+  jdbcPool: ContextShift[F],
+  alwaysRollback: Boolean = false)(implicit DE: SqlEffectEval[F, DbEffect]
+) extends TxManager[F, DbEffect] {
 
   override def tx: DbEffect ~> F = FunctionK.lift(doTx)
 

@@ -1,17 +1,20 @@
 package com.dylanm.functionalTodoApp.acceptance
 
-import cats.Eval
 import cats.effect.IO
 import com.twitter.finagle.http.RequestBuilder
 import com.dylanm.functionalTodoApp.int.IntegrationApp
+import com.dylanm.functionalTodoApp.module.Lazy
 import com.dylanm.functionalTodoApp.psql.EmbeddedPostgres
 import org.scalatest.FreeSpec
 
 class TodoAcceptanceTest extends FreeSpec {
   import com.dylanm.functionalTodoApp.db.sql._
-  val app = IntegrationApp.make[Eval, IO, SqlEffect[IO, ?]](EmbeddedPostgres.acceptanceInstance)
-  val service = app.webModule.service.value
-  val om = app.commonModule.json.value
+  val app = IntegrationApp.make[Lazy, IO, SqlEffect[IO, ?]](
+    db = EmbeddedPostgres.acceptanceInstance,
+    alwaysRollback = false
+  )
+  val service = app.webModule.service.value.right.get
+  val om = app.commonModule.json.value.right.get
 
   def d = System.nanoTime().toString
 

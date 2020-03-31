@@ -71,8 +71,9 @@ class DbModuleImpl[I[_]: Later: Monad, F[_]: Async, DbEffect[_]](
 
   private lazy val dataSource: I[DataSource] = Later[I].later {
     val connectionFactory = new DriverManagerConnectionFactory(config.url, config.user, config.password)
-
+    // scalastyle:off null
     val poolableConnectionFactory = new PoolableConnectionFactory(connectionFactory, null)
+    // scalastyle:on null
 
     val connectionPool = new GenericObjectPool(poolableConnectionFactory)
 

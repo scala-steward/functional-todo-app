@@ -25,3 +25,4 @@ web/css/bootstrap.ts
 /chat
 .attach_*
 src/main/resources/local.conf
+.DS_Store

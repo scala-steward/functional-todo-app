@@ -33,12 +33,12 @@ object Route {
     // so speed is more important than style here
     def pathVariable(part: String): Boolean = part.startsWith(":")
 
-    if (req.method != method) return None
+    if (req.method != method) None
 
     val parts = path.split("/")
     val reqParts = req.path.split("/")
 
-    if (parts.length != reqParts.length) return None
+    if (parts.length != reqParts.length) None
 
     val pairs = parts.zip(reqParts)
 
@@ -47,12 +47,12 @@ object Route {
       case (part, requestPart) => part == requestPart
     }
 
-    if (!sameParts) return None
+    if (!sameParts) None
 
     Some(pairs.filter(kv => pathVariable(kv._1)).toMap)
   }
 
-  implicit def monoid[F[_], Resp] = new Monoid[Route[F, Resp]] {
+  implicit def monoid[F[_], Resp]: Monoid[Route[F, Resp]] = new Monoid[Route[F, Resp]] {
     override def empty: Route[F, Resp] = Route(_ => None)
 
     override def combine(x: Route[F, Resp], y: Route[F, Resp]): Route[F, Resp] = req => x(req).orElse(y(req))

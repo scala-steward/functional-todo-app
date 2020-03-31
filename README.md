@@ -17,7 +17,7 @@ This project uses SBT to handle compiling, building, and running
 
 - functional modular system
 - layered architecture (dao - service - controller - route)
-- performance: 11k req/sec on my i9 Saptop for `GET /api/v1/items` (not too shabby, not sure what kind of perf we'll need from SIA but this is certainly better)
+- performance: 11k req/sec on my i9 Saptop for `GET /api/v1/items`
 - configuration from multiple sources (including `--help` command line parameter)
 - pure data access layer based on JDBC
 - pure JDBC transaction management

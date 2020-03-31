@@ -1,6 +1,6 @@
 # Functional TODO App
 
-[![Build Status](https://travis-ci.org/dmarticus/functional-todo-app.png?branch=master)](https://travis-ci.org/dmarticus/functional-todo-app)
+[![Build Status](https://travis-ci.org/github/dmarticus/functional-todo-app.png?branch=master)](https://travis-ci.org/github/dmarticus/functional-todo-app)
 
 Production-grade todo app REST API (with a database and everything) in functional scala
 

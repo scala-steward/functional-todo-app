@@ -49,7 +49,7 @@ scalastyleFailOnWarning := true
 
 lazy val testDependencies = Seq(
   "org.scalatest" %% "scalatest" % "3.0.5",
-  "ru.yandex.qatools.embed" % "postgresql-embedded" % "2.4"
+  "ru.yandex.qatools.embed" % "postgresql-embedded" % "2.10"
 ).map(_ % "test")
 
 val functionalTodoApp = project.in(file("."))

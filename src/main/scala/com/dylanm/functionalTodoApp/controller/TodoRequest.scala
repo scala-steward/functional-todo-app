@@ -10,12 +10,14 @@ case class TodoRequest(
 ) {
   import TodoRequest._
 
+  private val maxIdSize = 100
+
   def validate(id: String): ValidatedNel[String, TodoRequest] =
     List(
       validateNonEmpty(id, "id"),
-      validateMaxSize(id, "id", 100),
+      validateMaxSize(id, "id", maxIdSize),
       validateRegex(id, "id", idRegex, "must only contain alphanumeric characters or underscore"),
-      validateMaxSize(text, "text", 100)
+      validateMaxSize(text, "text", maxIdSize)
     ).sequence.map(_ => this)
   }
 
@@ -23,20 +25,23 @@ object TodoRequest {
   private val idRegex = Pattern.compile("[\\w]+")
 
   private def validateMaxSize(s: String, field: String, max: Int): ValidatedNel[String, Unit] =
-    if (s.length > max)
+    if (s.length > max) {
       s"$field: length is not less than or equal $max".invalidNel
-    else
+    } else {
       ().validNel
+    }
 
   private def validateNonEmpty(s: String, field: String): ValidatedNel[String, Unit] =
-    if (s.isEmpty)
+    if (s.isEmpty) {
       s"$field: cannot be empty".invalidNel
-    else
+    } else {
       ().validNel
+    }
 
   private def validateRegex(s: String, field: String, regex: Pattern, msg: String): ValidatedNel[String, Unit] =
-    if (!regex.matcher(s).matches())
+    if (!regex.matcher(s).matches()) {
       s"$field: $msg".invalidNel
-    else
+    } else {
       ().validNel
+    }
 }

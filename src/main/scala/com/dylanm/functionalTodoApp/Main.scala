@@ -31,7 +31,7 @@ object Main extends IOApp {
       configInfo <- loadConfig[IO](args.toArray, envOpt.map(_ + ".conf"))
       (printedConfig, config) = configInfo
 
-      _ <- EitherT.right(IO(println(printedConfig.toString)))
+      _ <- EitherT.right(IO(printedConfig.toString))
 
       appConfig = ApplicationConfig.load(config)
 
@@ -43,7 +43,7 @@ object Main extends IOApp {
     startedApp.value.flatMap {
 
       case Left(eagerExit) =>
-        IO(println(eagerExit.message)).map(_ => eagerExit.code)
+        IO(eagerExit.message).map(_ => eagerExit.code)
 
       case Right(_) => IO(ExitCode(0))
     }

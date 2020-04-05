@@ -29,7 +29,7 @@ lazy val dependencies = Seq(
   "org.postgresql" % "postgresql" % "42.2.12",
   "org.apache.commons" % "commons-dbcp2" % "2.7.0",
   "ch.qos.logback" % "logback-classic" % "1.2.3",
-  "me.scf37.config3" %% "config3" % "1.0.0"
+  "me.scf37.config3" %% "config3" % "1.0.4"
 )
 
 // Create a test Scala style task to run with tests

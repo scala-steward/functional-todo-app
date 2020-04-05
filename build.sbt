@@ -21,8 +21,8 @@ lazy val compilerOptions = Seq(
 )
 
 lazy val dependencies = Seq(
-  "org.typelevel" %% "cats-core" % "1.6.1",
   "org.typelevel" %% "cats-effect" % "2.1.2",
+  "org.typelevel" %% "cats-core" % "2.1.1",
   "org.typelevel" %% "cats-mtl-core" % "0.7.1",
   "com.twitter" %% "finatra-jackson" % "19.12.0",
   "org.flywaydb" % "flyway-core" % "5.2.4",
@@ -48,7 +48,7 @@ scalastyleFailOnWarning := true
 (scalastyleFailOnWarning in Test) := true
 
 lazy val testDependencies = Seq(
-  "org.scalatest" %% "scalatest" % "3.0.8",
+  "org.scalatest" %% "scalatest" % "3.1.1",
   "ru.yandex.qatools.embed" % "postgresql-embedded" % "2.10"
 ).map(_ % "test")
 

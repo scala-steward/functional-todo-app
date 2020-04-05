@@ -20,7 +20,9 @@ class CommonModuleImpl[I[_]: Later: Monad, F[_]: Sync](
 ) extends CommonModule[I, F] {
 
   override lazy val json: I[FinatraObjectMapper] = Later[I].later {
+    // scalastyle:off null
     val om = FinatraJacksonModule.provideScalaObjectMapper(null)
+    // scalastyle:on null
     if (jsonConfig.pretty) {
       om.configure(SerializationFeature.INDENT_OUTPUT, true)
     }
@@ -31,3 +33,4 @@ class CommonModuleImpl[I[_]: Later: Monad, F[_]: Sync](
     new LogImpl[F]
   }
 }
+

@@ -1,4 +1,7 @@
 # Functional TODO App
+
+[![Build Status](https://api.travis-ci.com/dmarticus/functional-todo-app.svg?branch=master)](https://travis-ci.com/github/dmarticus/functional-todo-app)
+
 Production-grade todo app REST API (with a database and everything) in functional scala
 
 This is an effort to create high quality application using FP approach with cats.
@@ -17,7 +20,7 @@ This project uses SBT to handle compiling, building, and running
 
 - functional modular system
 - layered architecture (dao - service - controller - route)
-- performance: 11k req/sec on my i9 Saptop for `GET /api/v1/items`
+- performance: 11k req/sec on my i9 Laptop for `GET /api/v1/items`
 - configuration from multiple sources (including `--help` command line parameter)
 - pure data access layer based on JDBC
 - pure JDBC transaction management
@@ -61,8 +64,7 @@ Application uses three types of effects:
 Modules system used can be seen as extension of well-known cake pattern in that they allow for the ability to override any instance or to get any instance from assembled application.
 In addition, though, modules support composition, precise explicit dependency management and lazy evaluation.  
 
-## TODOs (lol I know; I should just add them to my POSTGRE DB and make them accessible via this API)
-
+## TODO
 - Immutable in-memory dao using `StateT`
 - request context (including requestId for logging) using `Kleisli[F, Context, ?]` instead of F
 - delayed logging - delay logging evaluation till end of request processing to decide log level based on response (e.g. enable debug logging for failed requests only)

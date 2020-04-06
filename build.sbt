@@ -24,7 +24,7 @@ lazy val dependencies = Seq(
   "org.typelevel" %% "cats-effect" % "2.1.2",
   "org.typelevel" %% "cats-core" % "2.1.1",
   "org.typelevel" %% "cats-mtl-core" % "0.7.1",
-  "org.flywaydb" % "flyway-core" % "6.3.2",
+  "org.flywaydb" % "flyway-core" % "6.3.3",
   "com.twitter" %% "finatra-jackson" % "19.12.0",
   "org.postgresql" % "postgresql" % "42.2.12",
   "org.apache.commons" % "commons-dbcp2" % "2.7.0",

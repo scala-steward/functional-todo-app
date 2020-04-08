@@ -25,7 +25,7 @@ class ExceptionFilter[F[_]: Sync](
     Sync[F].defer(orig(req)).recoverWith {
       case e: RestException => for {
         _ <- log.logValidationError(e.getMessage, e)
-        r <- respond(Status.fromCode(e.status), e.errors)
+        r <- respond(e.status, e.errors)
       } yield r
 
       case e: CaseClassMappingException => for {

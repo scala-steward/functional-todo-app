@@ -13,7 +13,7 @@ sealed trait RestException extends RuntimeException with NoStackTrace {
 
 abstract class RestExceptionImpl private[exception] (val errors: Seq[String], val status: Status)
   extends RuntimeException(errors.mkString(", "))
-// scalastyle:off magic.number
+
 final case class ResourceAlreadyExistsException(msg: String)
   extends RestExceptionImpl(Seq(msg), Status.BadRequest) with RestException
 
@@ -22,4 +22,3 @@ final case class ResourceNotFoundException(msg: String)
 
 final case class ValidationFailedException(errors1: Seq[String])
   extends RestExceptionImpl(errors1, Status.BadRequest) with RestException
-// scalastyle:on magic.number

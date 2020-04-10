@@ -10,6 +10,8 @@ import com.twitter.finagle.http.Status
 import com.dylanm.functionalTodoApp.controller.TodoRequest
 import com.dylanm.functionalTodoApp.http.ExceptionFilter
 import com.dylanm.functionalTodoApp.http.Route
+import tethys.JsonReader
+import tethys.JsonWriter
 
 trait WebModule[I[_], F[_]] {
   def service: I[Request => F[Response]]
@@ -17,6 +19,7 @@ trait WebModule[I[_], F[_]] {
 
 object WebModule {
 
+  // scalastyle:off
   def apply[I[_]: Monad: Later, F[_]: Sync](
     controllerModule: ControllerModule[I, F],
     commonModule: CommonModule[I, F]
@@ -27,15 +30,18 @@ object WebModule {
       json <- commonModule.json
     } yield {
 
-      def toJson[T](v: F[T]): F[Response] = v.map {v =>
+      def toJson[T: JsonWriter](v: F[T]): F[Response] = for {
+        v <- v
+        jsonStr <- json.write(v)
+      } yield {
         val r = Response(Status.Ok)
         r.setContentTypeJson()
-        r.content = json.writeValueAsBuf(v)
+        r.contentString = jsonStr
         r
       }
 
-      def fromJson[T: Manifest](req: Request): T = {
-        json.parse[T](req.content)
+      def fromJson[T: JsonReader](req: Request): F[T] = {
+        json.read[T](req.contentString)
       }
 
       List(
@@ -45,11 +51,15 @@ object WebModule {
           toJson(todoController.get(ctx(":id")))),
 
         Route.mk[F, Response](Method.Post, "/api/v1/items/:id")((req, ctx) =>
-          toJson(todoController.create(ctx(":id"), fromJson[TodoRequest](req).validate(ctx(":id"))))
+          fromJson[TodoRequest](req).flatMap { r =>
+            toJson(todoController.create(ctx(":id"), r.validate(ctx(":id"))))
+          }
         ),
 
         Route.mk[F, Response](Method.Put, "/api/v1/items/:id")((req, ctx) =>
-          toJson(todoController.update(ctx(":id"), fromJson[TodoRequest](req).validate(ctx(":id"))))
+          fromJson[TodoRequest](req).flatMap { r =>
+            toJson(todoController.update(ctx(":id"), r.validate(ctx(":id"))))
+          }
         ),
 
         Route.mk[F, Response](Method.Delete, "/api/v1/items/:id")((req, ctx) =>

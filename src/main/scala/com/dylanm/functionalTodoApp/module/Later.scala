@@ -19,7 +19,7 @@ trait Later[I[_]] {
 }
 
 object Later {
-  def apply[I[_]: Later]: Later[I] = implicitly[Later[I]]
+  def apply[I[_] : Later]: Later[I] = implicitly[Later[I]]
 
   implicit val lazyInstance: Later[Lazy] = new Later[Lazy] {
     override def later[A](f: => A): Lazy[A] = Lazy(f)

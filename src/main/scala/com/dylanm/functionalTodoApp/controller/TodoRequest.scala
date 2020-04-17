@@ -7,8 +7,9 @@ import cats.implicits._
 import tethys.derivation.semiauto._
 
 case class TodoRequest(
-  text: String
-) {
+                        text: String
+                      ) {
+
   import TodoRequest._
 
   private val maxIdSize = 100
@@ -20,7 +21,7 @@ case class TodoRequest(
       validateRegex(id, "id", idRegex, "must only contain alphanumeric characters or underscore"),
       validateMaxSize(text, "text", maxIdSize)
     ).sequence.map(_ => this)
-  }
+}
 
 object TodoRequest {
   implicit val reader = jsonReader[TodoRequest]

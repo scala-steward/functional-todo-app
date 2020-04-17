@@ -12,11 +12,11 @@ trait ControllerModule[I[_], F[_]] {
 
 object ControllerModule {
 
-  def apply[I[_]: Monad, F[_]: Sync, DbEffect[_]](
-    commonModule: CommonModule[I, F],
-    serviceModule: ServiceModule[I, DbEffect],
-    dbModule: DbModule[I, F, DbEffect]
-  ): ControllerModule[I, F] = new ControllerModule[I, F] {
+  def apply[I[_] : Monad, F[_] : Sync, DbEffect[_]](
+                                                     commonModule: CommonModule[I, F],
+                                                     serviceModule: ServiceModule[I, DbEffect],
+                                                     dbModule: DbModule[I, F, DbEffect]
+                                                   ): ControllerModule[I, F] = new ControllerModule[I, F] {
 
     override val todoController: I[TodoController[F]] = for {
       todoService <- serviceModule.todoService

@@ -1,20 +1,16 @@
 package com.dylanm.functionalTodoApp.module
 
-import java.util.concurrent.Executors
-import java.util.concurrent.ThreadFactory
+import java.util.concurrent.{Executors, ThreadFactory}
 import java.util.concurrent.atomic.AtomicInteger
 
 import cats.Monad
-import cats.effect.Async
-import cats.effect.ContextShift
+import cats.effect.{Async, ContextShift}
 import cats.implicits._
-import javax.sql.DataSource
 import com.dylanm.functionalTodoApp.db.TxManager
 import com.dylanm.functionalTodoApp.db.sql.{SqlEffectEval, SqlTxManager}
 import com.dylanm.functionalTodoApp.module.config.DbConfig
-import org.apache.commons.dbcp2.DriverManagerConnectionFactory
-import org.apache.commons.dbcp2.PoolableConnectionFactory
-import org.apache.commons.dbcp2.PoolingDataSource
+import javax.sql.DataSource
+import org.apache.commons.dbcp2.{DriverManagerConnectionFactory, PoolableConnectionFactory, PoolingDataSource}
 import org.apache.commons.pool2.impl.GenericObjectPool
 import org.flywaydb.core.Flyway
 
@@ -26,15 +22,16 @@ trait DbModule[I[_], F[_], DbEffect[_]] {
 
 object DbModule {
   // scalastyle:off method.length
-  def apply[I[_]: Later: Monad, F[_]: Async, DbEffect[_]] (
-    config: DbConfig,
-    alwaysRollback: Boolean = false
-  )(implicit DE: SqlEffectEval[F, DbEffect]
-  ): DbModule[I, F, DbEffect] = new DbModule[I, F, DbEffect] {
+  def apply[I[_] : Later : Monad, F[_] : Async, DbEffect[_]](
+                                                              config: DbConfig,
+                                                              alwaysRollback: Boolean = false
+                                                            )(implicit DE: SqlEffectEval[F, DbEffect]
+                                                            ): DbModule[I, F, DbEffect] = new DbModule[I, F, DbEffect] {
 
     private val jdbcPool: I[ContextShift[F]] = Later[I].later {
       val jdbcPool = Executors.newFixedThreadPool(config.maxPoolSize, new ThreadFactory {
         private val id = new AtomicInteger()
+
         override def newThread(r: Runnable): Thread = {
           val t = new Thread(r)
           t.setDaemon(true)
@@ -84,9 +81,10 @@ object DbModule {
       _ <- flyway
       pool <- jdbcPool
       dataSource <- dataSource
-    } yield  {
+    } yield {
       new SqlTxManager[F, DbEffect](dataSource, pool, alwaysRollback)
     }
   }
+
   // scalastyle:on method.length
 }

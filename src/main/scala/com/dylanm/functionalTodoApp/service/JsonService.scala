@@ -15,7 +15,7 @@ trait JsonService[F[_]] {
 }
 
 object JsonService {
-  def apply[F[_]: Sync]: JsonService[F] = new JsonService[F] {
+  def apply[F[_] : Sync]: JsonService[F] = new JsonService[F] {
     override def read[T: JsonReader](json: String): F[T] =
       json.jsonAs[T] match {
         case Left(error) if error.getCause.isInstanceOf[JsonParseException] =>
@@ -28,7 +28,7 @@ object JsonService {
 
         case Left(error) => Sync[F].raiseError(ValidationFailedException(Seq(error.getMessage)))
 
-        case Right(value)  => value.pure[F]
+        case Right(value) => value.pure[F]
       }
 
     override def write[T: JsonWriter](value: T): F[String] =

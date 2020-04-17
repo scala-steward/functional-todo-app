@@ -12,9 +12,9 @@ trait DaoModule[I[_], DbEffect[_]] {
 
 object DaoModule {
 
-  def apply[I[_]: Later: Monad, F[_]: Sync, DbEffect[_]: Monad](
-    implicit DB: SqlEffectLift[F, DbEffect]
-  ):DaoModule[I, DbEffect] = new DaoModule[I, DbEffect] {
+  def apply[I[_] : Later : Monad, F[_] : Sync, DbEffect[_] : Monad](
+                                                                     implicit DB: SqlEffectLift[F, DbEffect]
+                                                                   ): DaoModule[I, DbEffect] = new DaoModule[I, DbEffect] {
 
     override val todoDao: I[TodoDao[DbEffect]] = Later[I].later {
       new TodoDaoSql[F, DbEffect]

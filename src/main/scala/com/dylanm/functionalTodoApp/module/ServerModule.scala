@@ -3,12 +3,10 @@ package com.dylanm.functionalTodoApp.module
 import cats.Monad
 import cats.effect.Effect
 import cats.implicits._
-import com.twitter.finagle.Http
-import com.twitter.finagle.Service
-import com.twitter.finagle.http.Request
-import com.twitter.util.Await
-import com.twitter.util.Future
 import com.dylanm.functionalTodoApp.module.config.ServerConfig
+import com.twitter.finagle.{Http, Service}
+import com.twitter.finagle.http.Request
+import com.twitter.util.{Await, Future}
 
 trait ServerModule[I[_], F[_]] {
   def server: I[() => Unit]
@@ -16,11 +14,11 @@ trait ServerModule[I[_], F[_]] {
 
 object ServerModule {
 
-  def apply[I[_] : Later : Monad, F[_] : Effect] (
-    webModule: WebModule[I, F],
-    commonModule: CommonModule[I, F],
-    config: ServerConfig
-  ): ServerModule[I, F] = new ServerModule[I, F] {
+  def apply[I[_] : Later : Monad, F[_] : Effect](
+                                                  webModule: WebModule[I, F],
+                                                  commonModule: CommonModule[I, F],
+                                                  config: ServerConfig
+                                                ): ServerModule[I, F] = new ServerModule[I, F] {
 
     override val server: I[() => Unit] = for {
       service <- webModule.service

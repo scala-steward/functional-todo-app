@@ -10,6 +10,7 @@ import com.dylanm.functionalTodoApp.module.Later
 import com.dylanm.functionalTodoApp.module.config.ApplicationConfig
 
 object MemoryApp {
+
   /**
     * Construct application using in-memory DAO instead of database
     */

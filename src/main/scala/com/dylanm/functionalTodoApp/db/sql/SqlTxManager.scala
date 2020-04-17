@@ -3,12 +3,11 @@ package com.dylanm.functionalTodoApp.db.sql
 import java.sql.Connection
 
 import cats.arrow.FunctionK
-import cats.effect.ContextShift
-import cats.effect.Sync
+import cats.effect.{ContextShift, Sync}
 import cats.implicits._
 import cats.~>
-import javax.sql.DataSource
 import com.dylanm.functionalTodoApp.db.TxManager
+import javax.sql.DataSource
 
 import scala.util.Try
 
@@ -17,16 +16,16 @@ import scala.util.Try
   *
   * JDBC transactions are run on separate thread pool to avoid suspensions of IO threads
   *
-  * @param ds data source to use
-  * @param jdbcPool thread pool for synchronous JDBC code
+  * @param ds             data source to use
+  * @param jdbcPool       thread pool for synchronous JDBC code
   * @param alwaysRollback Always rollback transaction, useful for tests
   * @tparam F generic effect
   */
-class SqlTxManager[F[_]: Sync, DbEffect[_]](
-  ds: DataSource,
-  jdbcPool: ContextShift[F],
-  alwaysRollback: Boolean = false)(implicit DE: SqlEffectEval[F, DbEffect]
-) extends TxManager[F, DbEffect] {
+class SqlTxManager[F[_] : Sync, DbEffect[_]](
+                                              ds: DataSource,
+                                              jdbcPool: ContextShift[F],
+                                              alwaysRollback: Boolean = false)(implicit DE: SqlEffectEval[F, DbEffect]
+                                            ) extends TxManager[F, DbEffect] {
 
   override def tx: DbEffect ~> F = FunctionK.lift(doTx)
 

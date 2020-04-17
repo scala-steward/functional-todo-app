@@ -1,24 +1,19 @@
 package com.dylanm.functionalTodoApp
 
-import cats.Applicative
-import cats.Defer
+import cats.{Applicative, Defer}
 import cats.data.EitherT
-import cats.effect.ExitCode
-import cats.effect.IO
-import cats.effect.IOApp
-import cats.effect.Sync
+import cats.effect.{ExitCode, IO, IOApp, Sync}
 import cats.implicits._
-import com.typesafe.config.Config
-import com.typesafe.config.ConfigFactory
-import me.scf37.config3.Config3
-import me.scf37.config3.Config3.PrintedConfig
 import com.dylanm.functionalTodoApp.db.sql.SqlEffect
 import com.dylanm.functionalTodoApp.module.Lazy
 import com.dylanm.functionalTodoApp.module.config.ApplicationConfig
+import com.typesafe.config.{Config, ConfigFactory}
+import me.scf37.config3.Config3
+import me.scf37.config3.Config3.PrintedConfig
 
 object Main extends IOApp {
 
-  private def env[F[_]: Applicative: Defer]: F[Option[String]] = Defer[F].defer {
+  private def env[F[_] : Applicative : Defer]: F[Option[String]] = Defer[F].defer {
     Option(System.getProperty("env"))
       .orElse(Option(System.getenv("env"))).pure[F]
   }
@@ -55,17 +50,18 @@ object Main extends IOApp {
   /**
     * Load configuration from multiple sources or fail with error message or exit code
     *
-    * @param args command line arguments
+    * @param args       command line arguments
     * @param configFile configuration file (optional)
     * @tparam F pure function
     * @return
     */
-  private def loadConfig[F[_]: Sync](
-    args: Array[String],
-    configFile: Option[String]
-  ): EitherT[F, EagerExit, (PrintedConfig, Config)] = {
+  private def loadConfig[F[_] : Sync](
+                                       args: Array[String],
+                                       configFile: Option[String]
+                                     ): EitherT[F, EagerExit, (PrintedConfig, Config)] = {
 
     def isAppConfigKey(key: String) = key.startsWith("app.")
+
     def isPasswordKey(key: String) = key.contains("password")
 
     for {

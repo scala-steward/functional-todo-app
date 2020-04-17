@@ -9,7 +9,7 @@ import cats.~>
   * It can be seen as a function that takes DbEffect, evaluates it using jdbc Connection and wraps
   * everything into generic effect.
   *
-  * @tparam F generic effect
+  * @tparam F        generic effect
   * @tparam DbEffect database effect
   */
 trait TxManager[F[_], DbEffect[_]] {

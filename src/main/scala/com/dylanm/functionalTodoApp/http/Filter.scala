@@ -1,7 +1,6 @@
 package com.dylanm.functionalTodoApp.http
 
-import com.twitter.finagle.http.Request
-import com.twitter.finagle.http.Response
+import com.twitter.finagle.http.{Request, Response}
 
 /**
   * HTTP service filter, i.e. function that converts HTTP service (Request => F[Response])

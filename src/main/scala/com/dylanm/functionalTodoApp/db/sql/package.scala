@@ -15,11 +15,11 @@ package object sql {
     */
   type SqlEffect[F[_], A] = Kleisli[F, Connection, A]
 
-  implicit def db[F[_]: Sync]: SqlEffectLift[F, SqlEffect[F, ?]] = new SqlEffectLift[F, SqlEffect[F, ?]] {
+  implicit def db[F[_] : Sync]: SqlEffectLift[F, SqlEffect[F, ?]] = new SqlEffectLift[F, SqlEffect[F, ?]] {
     override def lift[A](f: Connection => F[A]): SqlEffect[F, A] = Kleisli.apply(f)
   }
 
-  implicit def dbEval[F[_]: Sync]: SqlEffectEval[F, SqlEffect[F, ?]] = new SqlEffectEval[F, SqlEffect[F, ?]] {
+  implicit def dbEval[F[_] : Sync]: SqlEffectEval[F, SqlEffect[F, ?]] = new SqlEffectEval[F, SqlEffect[F, ?]] {
     override def eval[A](f: SqlEffect[F, A], c: Connection): F[A] = f(c)
   }
 }

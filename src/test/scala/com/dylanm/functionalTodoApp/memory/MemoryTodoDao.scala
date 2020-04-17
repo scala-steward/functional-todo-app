@@ -1,13 +1,13 @@
 package com.dylanm.functionalTodoApp.memory
 
 import cats.Monad
+import cats.implicits._
 import com.dylanm.functionalTodoApp.dao.TodoDao
 import com.dylanm.functionalTodoApp.model.Todo
-import cats.implicits._
 
 import scala.collection.mutable
 
-class MemoryTodoDao[F[_]: Monad] extends TodoDao[F] {
+class MemoryTodoDao[F[_] : Monad] extends TodoDao[F] {
   private val todos = mutable.Buffer.empty[Todo]
 
   override def list(): F[Seq[Todo]] = todos.toSeq.pure[F]

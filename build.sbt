@@ -49,7 +49,7 @@ scalastyleFailOnWarning := true
 (scalastyleFailOnWarning in Test) := true
 
 lazy val testDependencies = Seq(
-  "org.scalatest" %% "scalatest" % "3.0.5",
+  "org.scalatest" %% "scalatest" % "3.1.1",
   "ru.yandex.qatools.embed" % "postgresql-embedded" % "2.10"
 ).map(_ % "test")
 
@@ -61,5 +61,6 @@ val functionalTodoApp = project.in(file("."))
   .settings(libraryDependencies ++= dependencies)
   .settings(libraryDependencies ++= testDependencies)
 
-addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.7")
-addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full)
+addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.10.3")
+addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.1" cross CrossVersion.full)
+

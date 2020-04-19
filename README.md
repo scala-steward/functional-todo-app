@@ -22,7 +22,7 @@ This project uses SBT to handle compiling, building, and running
 - layered architecture (dao - service - controller - route)
 - performance: 11k req/sec on my i9 Laptop for `GET /api/v1/items`
 - configuration from multiple sources (including `--help` command line parameter)
-- pure data access layer b````ased on JDBC
+- pure data access layer based on JDBC
 - pure JDBC transaction management
 - separate thread pool for JDBC code
 - quality JSON handling and validation (with readable messages, including reason, line and column)

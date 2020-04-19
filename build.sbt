@@ -21,16 +21,16 @@ lazy val compilerOptions = Seq(
 )
 
 lazy val dependencies = Seq(
-  "org.typelevel" %% "cats-core" % "1.6.0",
-  "org.typelevel" %% "cats-effect" % "1.2.0",
-  "org.typelevel" %% "cats-mtl-core" % "0.4.0",
+  "org.typelevel" %% "cats-effect" % "2.1.3",
+  "org.typelevel" %% "cats-core" % "2.1.1",
+  "org.typelevel" %% "cats-mtl-core" % "0.7.1",
   "com.twitter" %% "finagle-http" % "19.2.0",
   "com.tethys-json" %% "tethys" % "0.9.0.1",
-  "org.flywaydb" % "flyway-core" % "5.2.4",
+  "org.flywaydb" % "flyway-core" % "6.3.3",
   "org.postgresql" % "postgresql" % "42.2.12",
-  "org.apache.commons" % "commons-dbcp2" % "2.6.0",
+  "org.apache.commons" % "commons-dbcp2" % "2.7.0",
   "ch.qos.logback" % "logback-classic" % "1.2.3",
-  "me.scf37.config3" %% "config3" % "1.0.0"
+  "me.scf37.config3" %% "config3" % "1.0.4"
 )
 
 // Create a test Scala style task to run with tests

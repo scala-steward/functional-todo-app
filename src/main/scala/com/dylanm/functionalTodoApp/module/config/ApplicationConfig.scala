@@ -1,20 +1,15 @@
 package com.dylanm.functionalTodoApp.module.config
 
-import com.typesafe.config.Config
-import com.typesafe.config.ConfigFactory
+import com.typesafe.config.{Config, ConfigFactory}
 
 case class ApplicationConfig(
-  json: JsonConfig,
-  server: ServerConfig,
-  db: DbConfig
-)
+                              server: ServerConfig,
+                              db: DbConfig
+                            )
 
 object ApplicationConfig {
 
   def load(c: Config): ApplicationConfig = ApplicationConfig(
-    json = JsonConfig(
-      pretty = c.getBoolean("app.json.pretty")
-    ),
     server = ServerConfig(
       interface = c.getString("app.server.interface"),
       port = c.getInt("app.server.port")

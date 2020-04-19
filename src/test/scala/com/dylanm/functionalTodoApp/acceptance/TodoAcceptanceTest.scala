@@ -1,20 +1,21 @@
-//package com.dylanm.functionalTodoApp.acceptance
-//
+package com.dylanm.functionalTodoApp.acceptance
+
 //import cats.effect.IO
 //import com.twitter.finagle.http.RequestBuilder
 //import com.dylanm.functionalTodoApp.int.IntegrationApp
 //import com.dylanm.functionalTodoApp.module.Lazy
 //import com.dylanm.functionalTodoApp.psql.EmbeddedPostgres
+//import com.twitter.io.Buf
 //import org.scalatest.FreeSpec
-//
+
 //class TodoAcceptanceTest extends FreeSpec {
 //  import com.dylanm.functionalTodoApp.db.sql._
-//  val app = IntegrationApp.make[Lazy, IO, SqlEffect[IO, ?]](
+//  val app = IntegrationApp[Lazy, IO, SqlEffect[IO, ?]](
 //    db = EmbeddedPostgres.acceptanceInstance,
 //    alwaysRollback = false
 //  )
-//  val service = app.webModule.service.value.right.get
-//  val om = app.commonModule.json.value.right.get
+//  val service = app.webModule.value.flatMap(_.service.value).right.get
+//  val om = app.commonModule.value.flatMap(_.json.value).right.get
 //
 //  def d = System.nanoTime().toString
 //
@@ -103,12 +104,15 @@
 //  private def get(path: String) =
 //    service(RequestBuilder().url(s"http://local/api/v1$path").buildGet()).unsafeRunSync()
 //
-//  private def post(path: String, content: Map[String, Any]) =
-//    service(RequestBuilder().url(s"http://local/api/v1$path").buildPost(om.writeValueAsBuf(content))).unsafeRunSync()
+//  private def post(path: String, content: Map[String, String]) =
+//    service(RequestBuilder().url(s"http://local/api/v1$path").buildPost(json(content))).unsafeRunSync()
 //
-//  private def put(path: String, content: Map[String, Any]) =
-//    service(RequestBuilder().url(s"http://local/api/v1$path").buildPut(om.writeValueAsBuf(content))).unsafeRunSync()
+//  private def put(path: String, content: Map[String, String]) =
+//    service(RequestBuilder().url(s"http://local/api/v1$path").buildPut(json(content))).unsafeRunSync()
 //
 //  private def delete(path: String) =
 //    service(RequestBuilder().url(s"http://local/api/v1$path").buildDelete()).unsafeRunSync()
+//
+//  private def json(content: Map[String, String]): Buf =
+//    Buf.Utf8(om.write(content).unsafeRunSync())
 //}

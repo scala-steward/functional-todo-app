@@ -1,11 +1,10 @@
 package com.dylanm.functionalTodoApp.logging
 
-import cats.Defer
-import cats.MonadError
-import org.slf4j.LoggerFactory
+import cats.{Defer, MonadError}
 import cats.implicits._
+import org.slf4j.LoggerFactory
 
-class LogImpl[F[_]: Defer] (implicit ME: MonadError[F, Throwable]) extends Log[F] {
+class LogImpl[F[_] : Defer](implicit ME: MonadError[F, Throwable]) extends Log[F] {
   private val appLog = LoggerFactory.getLogger("app")
   private val auditLog = LoggerFactory.getLogger("audit")
   private val requestLog = LoggerFactory.getLogger("request")
@@ -29,15 +28,15 @@ class LogImpl[F[_]: Defer] (implicit ME: MonadError[F, Throwable]) extends Log[F
     }
   }
 
-  override def logRequest(msg: =>String): F[Unit] = delay {
+  override def logRequest(msg: => String): F[Unit] = delay {
     requestLog.info(msg)
   }
 
-  override def logValidationError(msg: =>String, ex: Throwable): F[Unit] = delay {
+  override def logValidationError(msg: => String, ex: Throwable): F[Unit] = delay {
     appLog.warn(msg, ex)
   }
 
-  override def logUnexpectedError(msg: =>String, ex: Throwable): F[Unit] = delay {
+  override def logUnexpectedError(msg: => String, ex: Throwable): F[Unit] = delay {
     appLog.error(msg, ex)
   }
 }

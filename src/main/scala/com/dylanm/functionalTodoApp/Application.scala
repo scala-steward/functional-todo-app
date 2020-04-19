@@ -1,24 +1,46 @@
-
 package com.dylanm.functionalTodoApp
 
 import cats.Monad
-import cats.effect.Effect
-import cats.effect.Sync
-import com.dylanm.functionalTodoApp.db.sql.SqlEffectEval
-import com.dylanm.functionalTodoApp.db.sql.SqlEffectLift
-import com.dylanm.functionalTodoApp.module.DaoModule
-import com.dylanm.functionalTodoApp.module.DaoModuleImpl
-import com.dylanm.functionalTodoApp.module.DbModule
-import com.dylanm.functionalTodoApp.module.DbModuleImpl
-import com.dylanm.functionalTodoApp.module.Later
+import cats.effect.{Effect, Sync}
+import cats.implicits._
+import com.dylanm.functionalTodoApp.db.sql.{SqlEffectEval, SqlEffectLift}
 import com.dylanm.functionalTodoApp.module.config.ApplicationConfig
+import com.dylanm.functionalTodoApp.module._
 
+class Application[I[_]: Later: Monad, F[_]: Effect, DbEffect[_]: Sync](
+    config: ApplicationConfig
+)(
+    implicit
+    DB: SqlEffectLift[F, DbEffect],
+    DE: SqlEffectEval[F, DbEffect]
+) {
 
-class Application[I[_]: Later: Monad, F[_]: Effect, DbEffect[_]: Sync](config: ApplicationConfig)(
-  implicit DB: SqlEffectLift[F, DbEffect], DE: SqlEffectEval[F, DbEffect]
-) extends ApplicationBase[I, F, DbEffect](config) {
+  val commonModule: I[CommonModule[I, F]] = Later[I].later(CommonModule[I, F]())
 
-  override lazy val dbModule: DbModule[I, F, DbEffect] = new DbModuleImpl[I, F, DbEffect](config.db)
+  val dbModule: I[DbModule[I, F, DbEffect]] =
+    Later[I].later(DbModule[I, F, DbEffect](config.db))
 
-  override lazy val daoModule: DaoModule[I, DbEffect] = new DaoModuleImpl[I, F, DbEffect]()
+  val daoModule: I[DaoModule[I, DbEffect]] =
+    Later[I].later(DaoModule[I, F, DbEffect])
+
+  val serviceModule: I[ServiceModule[I, DbEffect]] = for {
+    daoModule <- daoModule
+  } yield ServiceModule[I, DbEffect](daoModule)
+
+  val controllerModule: I[ControllerModule[I, F]] = for {
+    commonModule <- commonModule
+    serviceModule <- serviceModule
+    dbModule <- dbModule
+  } yield
+    ControllerModule[I, F, DbEffect](commonModule, serviceModule, dbModule)
+
+  val webModule: I[WebModule[I, F]] = for {
+    controllerModule <- controllerModule
+    commonModule <- commonModule
+  } yield WebModule[I, F](controllerModule, commonModule)
+
+  val serverModule: I[ServerModule[I, F]] = for {
+    webModule <- webModule
+    commonModule <- commonModule
+  } yield ServerModule[I, F](webModule, commonModule, config.server)
 }

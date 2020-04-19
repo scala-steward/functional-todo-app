@@ -3,21 +3,19 @@ package com.dylanm.functionalTodoApp.controller.impl
 import cats.MonadError
 import cats.data.ValidatedNel
 import cats.implicits._
-import com.dylanm.functionalTodoApp.controller.TodoController
-import com.dylanm.functionalTodoApp.controller.TodoRequest
+import com.dylanm.functionalTodoApp.controller.{TodoController, TodoRequest}
 import com.dylanm.functionalTodoApp.db.TxManager
-import com.dylanm.functionalTodoApp.exception.ResourceNotFoundException
-import com.dylanm.functionalTodoApp.exception.ValidationFailedException
+import com.dylanm.functionalTodoApp.exception.{ResourceNotFoundException, ValidationFailedException}
 import com.dylanm.functionalTodoApp.logging.Log
 import com.dylanm.functionalTodoApp.model.Todo
 import com.dylanm.functionalTodoApp.service.TodoService
 
 
 class TodoControllerImpl[F[_], DbEffect[_]](
- service: TodoService[DbEffect],
- tx: TxManager[F, DbEffect],
- log: Log[F]
-) (implicit ME: MonadError[F, Throwable])
+                                             service: TodoService[DbEffect],
+                                             tx: TxManager[F, DbEffect],
+                                             log: Log[F]
+                                           )(implicit ME: MonadError[F, Throwable])
   extends TodoController[F] {
 
   override def list(): F[Seq[Todo]] = log.logAudit("list") {
@@ -33,7 +31,7 @@ class TodoControllerImpl[F[_], DbEffect[_]](
     for {
       todo <- lift(todo)
       r <- tx.tx(service.create(parse(id, todo)))
-    } yield  r
+    } yield r
 
   }
 
@@ -41,7 +39,7 @@ class TodoControllerImpl[F[_], DbEffect[_]](
     for {
       todo <- lift(todo)
       r <- tx.tx(service.update(parse(id, todo)))
-    } yield  r
+    } yield r
   }
 
   override def delete(id: String): F[Boolean] = log.logAudit("delete", id) {

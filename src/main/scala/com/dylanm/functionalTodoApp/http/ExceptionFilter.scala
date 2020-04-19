@@ -2,23 +2,19 @@ package com.dylanm.functionalTodoApp.http
 
 import cats.effect.Sync
 import cats.implicits._
-import com.fasterxml.jackson.core.JsonProcessingException
-import com.twitter.finagle.http.Request
-import com.twitter.finagle.http.Response
-import com.twitter.finagle.http.Status
-import com.twitter.finatra.json.FinatraObjectMapper
-import com.twitter.finatra.json.internal.caseclass.exceptions.CaseClassMappingException
 import com.dylanm.functionalTodoApp.exception.RestException
 import com.dylanm.functionalTodoApp.logging.Log
+import com.dylanm.functionalTodoApp.service.JsonService
+import com.twitter.finagle.http.{Request, Response, Status}
 
 /**
   * Convert error to REST error response
   *
   */
-class ExceptionFilter[F[_]: Sync](
-  om: FinatraObjectMapper,
-  log: Log[F]
-) extends Filter[F] {
+class ExceptionFilter[F[_] : Sync](
+                                    om: JsonService[F],
+                                    log: Log[F]
+                                  ) extends Filter[F] {
 
   override def apply(orig: Request => F[Response]): Request => F[Response] = req => {
 
@@ -26,22 +22,6 @@ class ExceptionFilter[F[_]: Sync](
       case e: RestException => for {
         _ <- log.logValidationError(e.getMessage, e)
         r <- respond(Status.fromCode(e.status), e.errors)
-      } yield r
-
-      case e: CaseClassMappingException => for {
-        _ <- log.logValidationError(e.getMessage, e)
-        r <- respond(Status.BadRequest, e.errors.map(_.getMessage()))
-      } yield r
-
-      case e: JsonProcessingException => for {
-        _ <- log.logValidationError(e.getMessage, e)
-        r <- {
-          val loc = Option(e.getLocation).map { loc =>
-            s" [line: ${loc.getLineNr}, column: ${loc.getColumnNr}]"
-          }
-          e.clearLocation()
-          respond(Status.BadRequest, Seq(e.getMessage + loc.getOrElse("")))
-        }
       } yield r
 
       case e: Throwable => for {
@@ -52,9 +32,13 @@ class ExceptionFilter[F[_]: Sync](
   }
 
   private def respond(status: Status, errors: Seq[String]): F[Response] = {
-    val r = Response(status)
-    r.setContentTypeJson()
-    r.content(om.writeValueAsBuf(Map("errors" -> errors.sorted)))
-    r.pure[F]
+    for {
+      json <- om.write(ErrorResponse(errors.sorted))
+    } yield {
+      val resp = Response(status)
+      resp.setContentTypeJson
+      resp.contentString = json
+      resp
+    }
   }
 }

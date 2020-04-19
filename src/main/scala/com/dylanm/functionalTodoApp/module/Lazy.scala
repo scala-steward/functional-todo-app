@@ -15,8 +15,11 @@ import scala.util.Try
   * @param f
   * @tparam T
   */
-class Lazy[T] private (f: => Either[Throwable, T]) {
-  lazy val value: Either[Throwable, T] = f
+class Lazy[T] private(f: => Either[Throwable, T]) {
+  lazy val value: Either[Throwable, T] = mock.map(Right.apply).getOrElse(f)
+
+  @volatile
+  var mock: Option[T] = None
 }
 
 object Lazy {

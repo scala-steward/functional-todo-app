@@ -2,35 +2,26 @@ package com.dylanm.functionalTodoApp.module
 
 import cats.Monad
 import cats.effect.Sync
-import com.fasterxml.jackson.databind.SerializationFeature
-import com.twitter.finatra.json.FinatraObjectMapper
-import com.twitter.finatra.json.modules.FinatraJacksonModule
-import com.dylanm.functionalTodoApp.module.config.JsonConfig
-import com.dylanm.functionalTodoApp.logging.Log
-import com.dylanm.functionalTodoApp.logging.LogImpl
+import com.dylanm.functionalTodoApp.logging.{Log, LogImpl}
+import com.dylanm.functionalTodoApp.service.JsonService
 
 trait CommonModule[I[_], F[_]] {
-  def json: I[FinatraObjectMapper]
+  def json: I[JsonService[F]]
 
   def log: I[Log[F]]
 }
 
-class CommonModuleImpl[I[_]: Later: Monad, F[_]: Sync](
-  jsonConfig: JsonConfig
-) extends CommonModule[I, F] {
+object CommonModule {
 
-  override lazy val json: I[FinatraObjectMapper] = Later[I].later {
-    // scalastyle:off null
-    val om = FinatraJacksonModule.provideScalaObjectMapper(null)
-    // scalastyle:on null
-    if (jsonConfig.pretty) {
-      om.configure(SerializationFeature.INDENT_OUTPUT, true)
+  def apply[I[_] : Later : Monad, F[_] : Sync](
+                                              ): CommonModule[I, F] = new CommonModule[I, F] {
+
+    override val json: I[JsonService[F]] = Later[I].later {
+      JsonService[F]
     }
-    FinatraJacksonModule.provideCamelCaseFinatraObjectMapper(om)
-  }
 
-  override lazy val log: I[Log[F]] = Later[I].later {
-    new LogImpl[F]
+    override val log: I[Log[F]] = Later[I].later {
+      new LogImpl[F]
+    }
   }
 }
-

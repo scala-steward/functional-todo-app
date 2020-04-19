@@ -3,8 +3,7 @@ package com.dylanm.functionalTodoApp.dao.sql
 import java.sql.ResultSet
 
 import cats.Monad
-import cats.effect.Resource
-import cats.effect.Sync
+import cats.effect.{Resource, Sync}
 import cats.implicits._
 import com.dylanm.functionalTodoApp.dao.TodoDao
 import com.dylanm.functionalTodoApp.db.sql.SqlEffectLift
@@ -14,10 +13,10 @@ import com.dylanm.functionalTodoApp.model.Todo
   * TodoDao implementation using jdbc Connection
   *
   * @param DB typeclass to lift Connection => T function to DbEffect
-  * @tparam F generic effect
+  * @tparam F        generic effect
   * @tparam DbEffect database effect
   */
-class TodoDaoSql[F[_]: Sync, DbEffect[_]: Monad](implicit DB: SqlEffectLift[F, DbEffect])
+class TodoDaoSql[F[_] : Sync, DbEffect[_] : Monad](implicit DB: SqlEffectLift[F, DbEffect])
   extends TodoDao[DbEffect] {
 
   override def list(): DbEffect[Seq[Todo]] = DB.lift { conn =>

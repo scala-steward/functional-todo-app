@@ -10,10 +10,15 @@ trait ServiceModule[I[_], F[_]] {
   def todoService: I[TodoService[F]]
 }
 
-class ServiceModuleImpl[I[_]: Monad, F[_]: Sync](daoModule: DaoModule[I, F]) extends ServiceModule[I, F] {
-  override lazy val todoService: I[TodoService[F]] = {
-    for {
-      dao <- daoModule.todoDao
-    } yield new TodoServiceImpl[F](dao)
-  }
+object ServiceModule {
+
+  def apply[I[_] : Monad, F[_] : Sync](daoModule: DaoModule[I, F]): ServiceModule[I, F] =
+    new ServiceModule[I, F] {
+
+      override val todoService: I[TodoService[F]] = {
+        for {
+          dao <- daoModule.todoDao
+        } yield new TodoServiceImpl[F](dao)
+      }
+    }
 }

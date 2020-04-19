@@ -1,8 +1,7 @@
 package com.dylanm.functionalTodoApp.http
 
 import cats.kernel.Monoid
-import com.twitter.finagle.http.Method
-import com.twitter.finagle.http.Request
+import com.twitter.finagle.http.{Method, Request}
 
 /**
   * HTTP Route is a function that tries to convert request to response.

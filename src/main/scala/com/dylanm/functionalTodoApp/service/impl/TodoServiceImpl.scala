@@ -3,8 +3,7 @@ package com.dylanm.functionalTodoApp.service.impl
 import cats.MonadError
 import cats.implicits._
 import com.dylanm.functionalTodoApp.dao.TodoDao
-import com.dylanm.functionalTodoApp.exception.ResourceAlreadyExistsException
-import com.dylanm.functionalTodoApp.exception.ResourceNotFoundException
+import com.dylanm.functionalTodoApp.exception.{ResourceAlreadyExistsException, ResourceNotFoundException}
 import com.dylanm.functionalTodoApp.model.Todo
 import com.dylanm.functionalTodoApp.service.TodoService
 

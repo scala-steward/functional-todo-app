@@ -28,7 +28,11 @@ class WebTest extends AnyFreeSpec {
     val r = service(url("/items/142").buildPut(Buf.Utf8("{\"a\": q}")))
       .unsafeRunSync()
     assert(r.statusCode == 400)
-    assert(r.contentString == """{"errors":["Unrecognized token 'q': was expecting ('true', 'false' or 'null')\n at [Source: (StringReader); line: 1, column: 8] line: 1, column: 8"]}""")
+    assert(
+      // can't get this test to pass without using a long line...
+      // scalastyle:off
+      r.contentString == """{"errors":["Unrecognized token 'q': was expecting ('true', 'false' or 'null')\n at [Source: (StringReader); line: 1, column: 8] line: 1, column: 8"]}""")
+    //scalastyle:on
   }
 
   "empty json results in validation message" in {

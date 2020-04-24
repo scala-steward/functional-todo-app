@@ -6,9 +6,9 @@ import com.dylanm.functionalTodoApp.Application
 import com.dylanm.functionalTodoApp.db.TxManager
 import com.dylanm.functionalTodoApp.model.Todo
 import com.dylanm.functionalTodoApp.module.Lazy
-import org.scalatest.FreeSpec
+import org.scalatest.freespec.AnyFreeSpec
 
-abstract class TodoDaoTest[F[_]: Effect, DbEffect[_]: Sync] extends FreeSpec {
+abstract class TodoDaoTest[F[_]: Effect, DbEffect[_]: Sync] extends AnyFreeSpec {
 
   protected def app: Application[Lazy, F, DbEffect]
 

@@ -3,18 +3,22 @@ package com.dylanm.functionalTodoApp.module
 import cats.Monad
 import cats.effect.Sync
 import cats.implicits._
+import com.twitter.finagle.http.Method
+import com.twitter.finagle.http.Request
+import com.twitter.finagle.http.Response
+import com.twitter.finagle.http.Status
 import com.dylanm.functionalTodoApp.controller.TodoRequest
-import com.dylanm.functionalTodoApp.http.{ExceptionFilter, Route}
-import com.twitter.finagle.http.{Method, Request, Response, Status}
-import tethys.{JsonReader, JsonWriter}
+import com.dylanm.functionalTodoApp.http.ExceptionFilter
+import com.dylanm.functionalTodoApp.http.Route
+import tethys.JsonReader
+import tethys.JsonWriter
 
 trait WebModule[I[_], F[_]] {
   def service: I[Request => F[Response]]
 }
 
 object WebModule {
-
-  // scalastyle:off
+  //scalastyle:off method.length
   def apply[I[_]: Monad: Later, F[_]: Sync](
       controllerModule: ControllerModule[I, F],
       commonModule: CommonModule[I, F]
@@ -69,5 +73,6 @@ object WebModule {
         req => route(req).getOrElse(Response.apply(Status.NotFound).pure[F]))
     }
   }
+  //scalastyle:on
 
 }

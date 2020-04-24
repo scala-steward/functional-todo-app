@@ -5,7 +5,8 @@ import java.sql.Connection
 import cats.Monad
 import cats.effect.Effect
 import com.dylanm.functionalTodoApp.Application
-import com.dylanm.functionalTodoApp.db.sql.{SqlEffectEval, SqlEffectLift}
+import com.dylanm.functionalTodoApp.db.sql.SqlEffectEval
+import com.dylanm.functionalTodoApp.db.sql.SqlEffectLift
 import com.dylanm.functionalTodoApp.module.Later
 import com.dylanm.functionalTodoApp.module.config.ApplicationConfig
 

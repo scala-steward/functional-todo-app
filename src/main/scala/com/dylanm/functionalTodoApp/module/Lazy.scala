@@ -15,7 +15,7 @@ import scala.util.Try
   * @param f
   * @tparam T
   */
-class Lazy[T] private(f: => Either[Throwable, T]) {
+class Lazy[T] private (f: => Either[Throwable, T]) {
   lazy val value: Either[Throwable, T] = mock.map(Right.apply).getOrElse(f)
 
   @volatile
@@ -25,19 +25,22 @@ class Lazy[T] private(f: => Either[Throwable, T]) {
 object Lazy {
   def apply[T](value: => T): Lazy[T] = new Lazy(Try(value).toEither)
 
-  implicit val MonadError: MonadError[Lazy, Throwable] = new MonadError[Lazy, Throwable] {
+  implicit val MonadError: MonadError[Lazy, Throwable] =
+    new MonadError[Lazy, Throwable] {
 
-    override def flatMap[A, B](fa: Lazy[A])(f: A => Lazy[B]): Lazy[B] = new Lazy(
-      fa.value.flatMap(v => f(v).value)
-    )
+      override def flatMap[A, B](fa: Lazy[A])(f: A => Lazy[B]): Lazy[B] =
+        new Lazy(
+          fa.value.flatMap(v => f(v).value)
+        )
 
-    override def tailRecM[A, B](a: A)(f: A => Lazy[Either[A, B]]): Lazy[B] = ???
+      override def tailRecM[A, B](a: A)(f: A => Lazy[Either[A, B]]): Lazy[B] =
+        ???
 
-    override def raiseError[A](e: Throwable): Lazy[A] = new Lazy(Left(e))
+      override def raiseError[A](e: Throwable): Lazy[A] = new Lazy(Left(e))
 
-    override def handleErrorWith[A](fa: Lazy[A])(f: Throwable => Lazy[A]): Lazy[A] = ???
+      override def handleErrorWith[A](fa: Lazy[A])(
+          f: Throwable => Lazy[A]): Lazy[A] = ???
 
-    override def pure[A](x: A): Lazy[A] = new Lazy[A](Right(x))
-  }
+      override def pure[A](x: A): Lazy[A] = new Lazy[A](Right(x))
+    }
 }
-

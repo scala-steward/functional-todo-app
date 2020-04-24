@@ -1,7 +1,5 @@
 package com.dylanm.functionalTodoApp.exception
 
-import com.twitter.finagle.http.Status
-
 import scala.util.control.NoStackTrace
 
 /**

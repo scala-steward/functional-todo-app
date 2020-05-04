@@ -67,12 +67,11 @@ In addition, though, modules support composition, precise explicit dependency ma
 ## TODO
 - Immutable in-memory dao using `StateT`
 - request context (including requestId for logging) using `Kleisli[F, Context, ?]` instead of F
-- delayed logging - delay logging evaluation till end of request processing to decide log level based on response (e.g. enable debug logging for failed requests only)
-- find better way to manage Application effects (3 seems to be a bit high)
-- add scalacheck?
-- use `Resource` for `I[_]`? Not sure I should care about proper shutdown - well-written application should behave well in case of forced termination.
-- application statistics: query and transaction execution timings. Finagle also provides request timing stats, make it more explicit somehow?
-- add scalafmt?
+- delayed logging - delay logging evaluation until the end of any request processing to decide log level based on response (e.g. enable debug logging for failed requests only)
+- find better way to manage `Application` effects (3 seems to be a bit high)
+- use `Resource` for `I[_]`? Not sure I should care about properly shutting down -- a well-written application should behave well in case of forced termination.
 - consider moving to http4s for JSON?
+- investigate adding request tracing to get more insights into application statistics; look into the example [here](https://medium.com/@ayushm4489/functional-tracing-using-scala-dc98b1f2ec5) for inspiration and potentially
+use a library like [natchez](https://github.com/tpolecat/natchez) for implementing the `Trace` and `Span` attributes
 - Add request flow control: timeouts, parallel request count limit
 - cancellation on timeout? Does it make sense on JDBC? Will it improve behavior of overloaded app?

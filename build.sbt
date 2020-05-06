@@ -16,8 +16,8 @@ lazy val compilerOptions = Seq(
   "-Ywarn-numeric-widen",
   "-Xlint",
   "-language:_",
-  "-Ypartial-unification"/*,
-  "-Xfatal-warnings"*/
+  "-Ypartial-unification",
+  "-Xfatal-warnings"
 )
 
 lazy val dependencies = Seq(

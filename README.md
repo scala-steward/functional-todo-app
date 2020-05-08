@@ -16,6 +16,12 @@ This project uses SBT to handle compiling, building, and running
 - Testing `sbt test` (runs both unit and acceptance tests)
 - Running -- `sbt run` (this won't work unless you're running a local instance of PostGreSQL)
 
+## Running the app with docker
+
+- Publish the Docker image locally -- `sbt publishLocal`
+- Build the Docker image locally -- `docker build --tag $service_name --f ./docker/Dockerfile .` or (`./docker/build.sh`)
+- Run the service in a docker container -- `docker run -p 8080:8080 $service_name` or (`./docker/run.sh`)
+
 ## Features so far
 
 - functional modular system

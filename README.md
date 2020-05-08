@@ -25,7 +25,7 @@ returns `HTTP/1.1 200 OK`
 - Build the Docker image locally -- `docker build --tag $service_name --f ./docker/Dockerfile .` (or `./docker/build.sh`)
 - Run the service in a docker container -- `docker run -p 8080:8080 $service_name` (or `./docker/run.sh`)
 
-Once again, you can verify that the app is running locally in docker by running `curl -iL http://localhost:8080/api/v1/items | grep "^HTTP\/"`
+Once again, you can verify that the app is running locally in docker (it exposes the same port as a local rungst) by running `curl -iL http://localhost:8080/api/v1/items | grep "^HTTP\/"`
 and confirming it returns `HTTP/1.1 200 OK`
 
 ## Features so far

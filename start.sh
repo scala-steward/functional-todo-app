@@ -2,4 +2,4 @@
 
 cd /opt
 
-exec bin/functionalTodoApp $@
+exec bin/functionaltodoapp$@

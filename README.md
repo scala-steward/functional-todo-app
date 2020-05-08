@@ -44,7 +44,7 @@ and confirming it returns `HTTP/1.1 200 OK`
 - structured audit logging
 - data access layer tests using embedded postgres
 - acceptance tests using embedded postgres
-- packaging and dockerization. Try it now: `docker run --rm dylanm/functionaltodoapp --help`
+- packaging and dockerization. See [this section](#running-the-app-with-docker)
 
 ## Architecture
 

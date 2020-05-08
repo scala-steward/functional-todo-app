@@ -16,11 +16,17 @@ This project uses SBT to handle compiling, building, and running
 - Testing `sbt test` (runs both unit and acceptance tests)
 - Running -- `sbt run` (this won't work unless you're running a local instance of PostGreSQL)
 
+Once the app is running locally you can verify it by confirming that running `curl -iL http://localhost:8080/api/v1/items | grep "^HTTP\/"`
+returns `HTTP/1.1 200 OK`
+
 ## Running the app with docker
 
 - Publish the Docker image locally -- `sbt publishLocal`
 - Build the Docker image locally -- `docker build --tag $service_name --f ./docker/Dockerfile .` or (`./docker/build.sh`)
 - Run the service in a docker container -- `docker run -p 8080:8080 $service_name` or (`./docker/run.sh`)
+
+Once again, you can verify that the app is running locally in docker by running `curl -iL http://localhost:8080/api/v1/items | grep "^HTTP\/"`
+and confirming it returns `HTTP/1.1 200 OK`
 
 ## Features so far
 

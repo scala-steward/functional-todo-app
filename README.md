@@ -5,7 +5,7 @@
 Production-grade todo app REST API (with a database and everything) in functional scala
 
 This is an effort to create high quality application using FP approach with cats.
-As this is intended as both a learning and teaching project, I used more custom code instead of import FP libraries 
+As this is intended as both a learning and teaching project, I used more custom code instead of existing FP libraries 
 (minus Cats, obviously).
 
 ## Running the app

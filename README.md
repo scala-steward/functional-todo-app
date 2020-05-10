@@ -34,8 +34,8 @@ and confirming it returns `HTTP/1.1 200 OK`
 - layered architecture (dao - service - controller - route)
 - performance: 11k req/sec on my i9 Laptop for `GET /api/v1/items`
 - configuration from multiple sources (including `--help` command line parameter)
-- pure data access layer based on JDBC
-- pure JDBC transaction management
+- pure data access layer based on JDBC (consider refactoring to use Skunk)
+- pure JDBC transaction management (consider refactoring to use Skunk)
 - separate thread pool for JDBC code
 - quality JSON handling and validation (with readable messages, including reason, line and column)
 - input validation (using Validated)

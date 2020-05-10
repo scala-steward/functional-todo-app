@@ -49,7 +49,7 @@ scalastyleFailOnWarning := true
 (scalastyleFailOnWarning in Test) := true
 
 lazy val testDependencies = Seq(
-  "org.scalatest" %% "scalatest" % "3.1.1",
+  "org.scalatest" %% "scalatest" % "3.1.2",
   "ru.yandex.qatools.embed" % "postgresql-embedded" % "2.10"
 ).map(_ % "test")
 

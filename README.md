@@ -14,14 +14,14 @@ This project uses SBT to handle compiling, building, and running
 
 - Compiling -- `sbt compile`
 - Testing `sbt test` (runs both unit and acceptance tests)
-- Running -- `sbt run` (this won't work unless you're running a local instance of PostGreSQL)
+- Running -- `sbt run` (this won't work unless you're running a local instance of Postgres)
 
 Once the app is running locally you can verify it by confirming that running `curl -iL http://localhost:8080/api/v1/items | grep "^HTTP\/"`
 returns `HTTP/1.1 200 OK`
 
 ## Running the app with docker
 
-- Publish the Docker image locally -- `sbt publishLocal`
+- Publish the Docker image locally using the `pack` plugin -- `sbt pack`
 - Build the Docker image locally -- `docker build --tag $service_name --f ./docker/Dockerfile .` (or `./docker/build.sh`)
 - Run the service in a docker container -- `docker run -p 8080:8080 $service_name` (or `./docker/run.sh`)
 
@@ -34,8 +34,8 @@ and confirming it returns `HTTP/1.1 200 OK`
 - layered architecture (dao - service - controller - route)
 - performance: 11k req/sec on my i9 Laptop for `GET /api/v1/items`
 - configuration from multiple sources (including `--help` command line parameter)
-- pure data access layer based on JDBC
-- pure JDBC transaction management
+- pure data access layer based on JDBC (consider refactoring to use Skunk)
+- pure JDBC transaction management (consider refactoring to use Skunk)
 - separate thread pool for JDBC code
 - quality JSON handling and validation (with readable messages, including reason, line and column)
 - input validation (using Validated)

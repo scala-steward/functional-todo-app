@@ -17,6 +17,8 @@ rebel.xml
 /web3-web/data
 /web3-main/data
 .idea
+.metals
+.bloop
 backup*.bz2
 node_modules
 

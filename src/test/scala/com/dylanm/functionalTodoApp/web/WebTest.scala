@@ -31,7 +31,8 @@ class WebTest extends AnyFreeSpec {
     assert(
       // can't get this test to pass without using a long line...
       // scalastyle:off
-      r.contentString == """{"errors":["Unrecognized token 'q': was expecting ('true', 'false' or 'null')\n at [Source: (StringReader); line: 1, column: 8] line: 1, column: 8"]}""")
+      r.contentString == """{"errors":["Unrecognized token 'q': was expecting ([JSON String, Number, Array, Object or token 'null', 'true' or 'false]')\n at [Source: (StringReader); line: 1, column: 8] line: 1, column: 8"]}""")
+      // r.contentString == """{"errors":["Unrecognized token 'q': was expecting ('true', 'false' or 'null')\n at [Source: (StringReader); line: 1, column: 8] line: 1, column: 8"]}""")
     //scalastyle:on
   }
 

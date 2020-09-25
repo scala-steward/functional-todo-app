@@ -28,7 +28,7 @@ lazy val dependencies = Seq(
   "com.tethys-json" %% "tethys" % "0.11.0",
   "org.flywaydb" % "flyway-core" % "6.5.7",
   "org.postgresql" % "postgresql" % "42.2.16",
-  "org.apache.commons" % "commons-dbcp2" % "2.7.0",
+  "org.apache.commons" % "commons-dbcp2" % "2.8.0",
   "ch.qos.logback" % "logback-classic" % "1.2.3",
   "me.scf37.config3" %% "config3" % "1.0.4"
 )

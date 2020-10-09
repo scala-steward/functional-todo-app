@@ -27,7 +27,7 @@ lazy val dependencies = Seq(
   "com.twitter" %% "finagle-http" % "20.9.0",
   "com.tethys-json" %% "tethys" % "0.11.0",
   "org.flywaydb" % "flyway-core" % "7.0.1",
-  "org.postgresql" % "postgresql" % "42.2.16",
+  "org.postgresql" % "postgresql" % "42.2.17",
   "org.apache.commons" % "commons-dbcp2" % "2.8.0",
   "ch.qos.logback" % "logback-classic" % "1.2.3",
   "me.scf37.config3" %% "config3" % "1.0.4"
